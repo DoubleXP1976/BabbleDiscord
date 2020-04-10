@@ -6,7 +6,7 @@ from redbot.core.utils._internal_utils import send_to_owners_with_prefix_replace
 from redbot.core.utils.chat_formatting import escape, pagify
 
 from .thetatypes import (
-    ThetaStream
+    Theta
     )
 from .errors import (
     APIError,

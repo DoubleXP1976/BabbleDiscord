@@ -1,4 +1,4 @@
-from .theta import Theta
+from .theta import theta
 
 
 def setup(bot):

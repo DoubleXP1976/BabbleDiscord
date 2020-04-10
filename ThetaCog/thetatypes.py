@@ -171,7 +171,7 @@ class ThetaStream(Theta):
         url = f"https://www.theta.tv/{data['user_name']}"
         logo = data["profile_image_url"]
         if logo is None:
-            logo = "https://user-slivertv.imgix.net/default_profile.jpg?w=56" class="avatar"
+            logo = "https://user-slivertv.imgix.net/default_profile.jpg?w=56"
         status = data["title"]
         if not status:
             status = _("Untitled broadcast")
