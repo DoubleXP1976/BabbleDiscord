@@ -9,6 +9,7 @@ from .thetatypes import (
     ThetaStream
     )
 from .errors import (
+    ThetaError,
     APIError,
     InvalidThetaCredentials,
     OfflineStream,

@@ -1,18 +1,18 @@
-class StreamsError(Exception):
+class ThetaError(Exception):
     pass
 
 
-class StreamNotFound(StreamsError):
+class StreamNotFound(ThetaError):
     pass
 
 
-class APIError(StreamsError):
+class APIError(ThetaError):
     pass
 
 
-class InvalidThetaCredentials(StreamsError):
+class InvalidThetaCredentials(ThetaError):
     pass
 
 
-class OfflineStream(StreamsError):
+class OfflineStream(ThetaError):
     pass
