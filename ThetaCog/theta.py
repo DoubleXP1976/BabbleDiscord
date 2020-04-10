@@ -10,7 +10,7 @@ from .thetatypes import (
     )
 from .errors import (
     APIError,
-    InvalidThetaCredentials
+    InvalidThetaCredentials,
     OfflineStream,
     StreamNotFound,
     StreamsError,
