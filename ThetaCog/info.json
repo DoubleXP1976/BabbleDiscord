@@ -1,0 +1,15 @@
+
+{
+  "author": ["DoubleXP"],
+  "install_msg": "Thanks for installing my cog! Feel free to join my support server (https://discord.gg/t5VYRzf) if you have any questions.",
+  "name": "ThetaCog",
+  "short": "Theta Cog by DoubleXP.",
+  "description": "Stream Alert cog, specific to Theta.tv, that notifies guild members when a Theta.tv streamer is live.",
+  "tags": [
+      "utility",
+      "streaming",
+      "community",
+      "alerts",
+      "fun"
+  ]
+}
