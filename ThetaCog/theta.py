@@ -1,4 +1,3 @@
-import PubNub = require('pubnub')
 import discord
 from redbot.core.bot import Red
 from redbot.core import checks, commands, Config
