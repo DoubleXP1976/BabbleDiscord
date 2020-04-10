@@ -170,7 +170,7 @@ class Theta(commands.Cog):
         )
         await self.check_online(ctx, stream)
 
-      async def check_online (
+    async def check_online(
         self,
         ctx: commands.Context,
         stream: Union[ThetaStream],
