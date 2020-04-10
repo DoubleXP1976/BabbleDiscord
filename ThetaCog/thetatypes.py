@@ -8,8 +8,6 @@ from typing import ClassVar, Optional, List
 import aiohttp
 import discord
 
-import PubNub
-
 from .thetaerrors import (
     APIError,
     OfflineStream,
