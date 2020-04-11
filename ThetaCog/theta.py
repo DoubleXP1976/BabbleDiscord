@@ -31,7 +31,7 @@ log = logging.getLogger("red.core.cogs.Theta")
 
 
 @cog_i18n(_)
-class Theta(commands.Cog):
+class Theta(commands.Theta):
 
     global_defaults = {"refresh_timer": 200, "tokens": {}, "streams": []}
 
@@ -58,8 +58,6 @@ class Theta(commands.Cog):
 
         self.theta: List[Theta] = []
         self.task: Optional[asyncio.Task] = None
-
-        self.yt_cid_pattern = re.compile("^UC[-_A-Za-z0-9]{21}[AQgw]$")
 
         self._ready_event: asyncio.Event = asyncio.Event()
         self._init_task: asyncio.Task = self.bot.loop.create_task(self.initialize())
@@ -271,7 +269,7 @@ class Theta(commands.Cog):
         await ctx.send(msg)
 
     @thetaalert.command(name="stop", usage="[disable_all=No]")
-    async def thetaalert_stop(self, ctx: commands.Context, _all: bool = False):
+    async def thetaalert_stop(self, ctx: commands.Theta, _all: bool = False):
         """Disable all stream alerts in this channel or server.
         `[p]thetaalert stop` will disable this channel's stream
         alerts.
