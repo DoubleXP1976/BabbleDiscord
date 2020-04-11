@@ -102,8 +102,8 @@ class Theta(commands.Cog):
                 if tokens.get("client_secret"):
                     try:
                         tokens["access_token"]
-                    except KeyError:
-                        message = _(
+        except KeyError:
+            message = _(
                     "You need a client secret key to use correctly Theta API on this cog.\n"
                     "Follow these steps:\n"
                     "1. Go to this page: https://discord.gg/as8hUeA.\n"
@@ -115,7 +115,7 @@ class Theta(commands.Cog):
                     "or in DM with the bot."
                 )
                 await send_to_owners_with_prefix_replaced(self.bot, message)
-            async with aiohttp.ClientSession() as session:
+        async with aiohttp.ClientSession() as session:
             async with session.post(
                 "https://api.theta.tv/v1/oauth/token",
                 params={
