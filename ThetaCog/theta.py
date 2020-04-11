@@ -31,7 +31,7 @@ log = logging.getLogger("red.core.cogs.Theta")
 
 
 @cog_i18n(_)
-class Theta(commands.Theta):
+class Theta(commands.Cog):
 
     global_defaults = {"refresh_timer": 200, "tokens": {}, "streams": []}
 
