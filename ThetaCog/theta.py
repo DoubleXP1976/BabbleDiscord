@@ -125,7 +125,7 @@ class Theta(commands.Cog):
                     "grant_type": "access_token",
                 },
             ) as req:
-                try:
+                     try:
                     data = await req.json()
                 except aiohttp.ContentTypeError:
                     data = {}
