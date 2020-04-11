@@ -269,7 +269,7 @@ class Theta(commands.Cog):
         await ctx.send(msg)
 
     @thetaalert.command(name="stop", usage="[disable_all=No]")
-    async def thetaalert_stop(self, ctx: commands.Theta, _all: bool = False):
+    async def thetaalert_stop(self, ctx: commands.Context, _all: bool = False):
         """Disable all stream alerts in this channel or server.
         `[p]thetaalert stop` will disable this channel's stream
         alerts.
