@@ -126,7 +126,7 @@ class Theta(commands.Cog):
                 },
             ) as req:
                      try:
-                    data = await req.json()
+                         data = await req.json()
                 except aiohttp.ContentTypeError:
                     data = {}
 
