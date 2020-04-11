@@ -103,7 +103,7 @@ class Theta(commands.Cog):
                     try:
                         tokens["access_token"]
                     except KeyError:
-                message = _(
+                        message = _(
                     "You need a client secret key to use correctly Theta API on this cog.\n"
                     "Follow these steps:\n"
                     "1. Go to this page: https://discord.gg/as8hUeA.\n"
