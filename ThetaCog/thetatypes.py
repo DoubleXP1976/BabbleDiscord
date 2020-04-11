@@ -61,7 +61,7 @@ class Theta:
     def __repr__(self):
         return "<{0.__class__.__name__}: {0.name}>".format(self)
 
-class ThetaStream(Stream):
+class ThetaStream(Theta):
 
     token_name = "theta"
 
