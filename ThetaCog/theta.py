@@ -8,8 +8,7 @@ from redbot.core.utils.chat_formatting import escape, pagify
 from .thetatypes import (
     ThetaStream
     )
-from .errors import (
-    ThetaError,
+from .thetaerrors import (
     APIError,
     InvalidThetaCredentials,
     OfflineStream,
