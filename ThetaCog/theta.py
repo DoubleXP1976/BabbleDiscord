@@ -166,7 +166,7 @@ class Theta(commands.Cog):
         theta = ThetaStream(
             name=channel_name, token=token, bearer=self.ttv_bearer_cache.get("access_token", None),
         )
-        await self.check_online(ctx, stream)
+        await self.check_online(ctx, theta)
 
     async def check_online(
         self,
