@@ -21,7 +21,7 @@ THETA_BASE_URL = "https://api.theta.tv/v1"
 THETA_ID_ENDPOINT = THETA_BASE_URL + "/user/{{USER_ID}}"
 THETA_STREAMS_ENDPOINT = THETA_BASE_URL + "/theta/channel/list?number=1&="
 
-_ = Translator("Theta", __file__)
+_ = Translator("Streams", __file__)
 
 log = logging.getLogger("redbot.cogs.Theta")
 
@@ -29,13 +29,6 @@ log = logging.getLogger("redbot.cogs.Theta")
 def rnd(url):
     """Appends a random parameter to the url to avoid Discord's caching"""
     return url + "?rnd=" + "".join([choice(ascii_letters) for _loop_counter in range(6)])
-
-
-def get_video_ids_from_feed(feed):
-    root = ET.fromstring(feed)
-    rss_video_ids = []
-    for child in root.iter("{http://www.w3.org/2005/Atom}entry"):
-        yield i.text
 
 
 class Theta:
@@ -68,7 +61,7 @@ class Theta:
     def __repr__(self):
         return "<{0.__class__.__name__}: {0.name}>".format(self)
 
-class ThetaStream(Theta):
+class ThetaStream(Stream):
 
     token_name = "theta"
 

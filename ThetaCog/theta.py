@@ -26,7 +26,7 @@ from datetime import datetime
 from collections import defaultdict
 from typing import Optional, List, Tuple, Union
 
-_ = Translator("Theta", __file__)
+_ = Translator("Streams", __file__)
 log = logging.getLogger("red.core.cogs.Theta")
 
 
@@ -161,7 +161,7 @@ class Theta(commands.Cog):
                 await self.get_theta_bearer_token()
 
     @commands.command()
-    async def theta(self, ctx: commands.Context, channel_name: str):
+    async def thetastream(self, ctx: commands.Context, channel_name: str):
         """Check if a Theta channel is live."""
         await self.maybe_renew_theta_bearer_token()
         token = (await self.bot.get_shared_api_tokens("theta")).get("client_id")
@@ -232,11 +232,11 @@ class Theta(commands.Cog):
     @thetaalert.command(name="thetaalert")
     async def theta_alert(self, ctx: commands.Context, channel_name_or_id: str):
         """Toggle alerts in this channel for a Theta stream."""
-        await self.stream_alert(ctx, ThetaStream, channel_name_or_id)
+        await self.theta_alert(ctx, ThetaStream, channel_name_or_id)
 
     @thetaalert.command(name="stop", usage="[disable_all=No]")
-    async def streamalert_stop(self, ctx: commands.Context, _all: bool = False):
-        """Disable all stream alerts in this channel or server.
+    async def thetaalert_stop(self, ctx: commands.Context, _all: bool = False):
+        """Disable all Theta stream alerts in this channel or server.
         `[p]thetaalert stop` will disable this channel's stream
         alerts.
         Do `[p]thetaalert stop yes` to disable all stream alerts in
@@ -278,7 +278,7 @@ class Theta(commands.Cog):
         Do `[p]thetaalert stop yes` to disable all stream alerts in
         this server.
         """
-        streams = self.streams.copy()
+        theta = self.theta.copy()
         local_channel_ids = [c.id for c in ctx.guild.channels]
         to_remove = []
 
@@ -296,7 +296,7 @@ class Theta(commands.Cog):
         for theta in to_remove:
             theta.remove(stream)
 
-        self.streams = theta
+        self.theta = theta
         await self.save_theta()
 
         if _all:
@@ -338,7 +338,7 @@ class Theta(commands.Cog):
                 theta = _class(id=channel_name, token=token)
             elif is_theta:
                 await self.maybe_renew_theta_bearer_token()
-                stream = _class(
+                theta = _class(
                     name=channel_name,
                     token=token.get("client_id"),
                     bearer=self.ttv_bearer_cache.get("access_token", None),
@@ -413,7 +413,7 @@ class Theta(commands.Cog):
     @message.command(name="mention")
     @commands.guild_only()
     async def with_mention(self, ctx: commands.Context, message: str = None):
-        """Set theta alert message when mentions are enabled.
+        """Set Theta alert message when mentions are enabled.
         Use `{mention}` in the message to insert the selected mentions.
         Use `{theta.name}` in the message to insert the channel or user name.
         For example: `[p]thetaset message mention "{mention}, {theta.name} is live!"`
@@ -428,7 +428,7 @@ class Theta(commands.Cog):
     @message.command(name="nomention")
     @commands.guild_only()
     async def without_mention(self, ctx: commands.Context, message: str = None):
-        """Set theta alert message when mentions are disabled.
+        """Set Theta alert message when mentions are disabled.
         Use `{theta.name}` in the message to insert the channel or user name.
         For example: `[p]thetaset message nomention "{theta.name} is live!"`
         """
@@ -451,7 +451,7 @@ class Theta(commands.Cog):
     @thetaset.group()
     @commands.guild_only()
     async def mention(self, ctx: commands.Context):
-        """Manage mention settings for theta alerts."""
+        """Manage mention settings for Theta alerts."""
         pass
 
     @mention.command(aliases=["everyone"])
@@ -495,7 +495,7 @@ class Theta(commands.Cog):
         else:
             await self.db.role(role).mention.set(True)
             msg = _(
-                "When a stream or community is live, `@\u200b{role.name}` will be mentioned."
+                "When a Theta stream is live, `@\u200b{role.name}` will be mentioned."
             ).format(role=role)
             if not role.mentionable:
                 msg += " " + _(
@@ -584,7 +584,7 @@ class Theta(commands.Cog):
         await self.bot.wait_until_ready()
         while True:
             try:
-                await self.check_streams()
+                await self.check_theta()
             except asyncio.CancelledError:
                 pass
             await asyncio.sleep(await self.db.refresh_timer())
@@ -628,7 +628,7 @@ class Theta(commands.Cog):
                             else:
                                 content = _("{mention}, {theta} is now live!").format(
                                     mention=mention_str,
-                                    stream=escape(
+                                    theta=escape(
                                         str(theta.name), mass_mentions=True, formatting=True
                                     ),
                                 )
