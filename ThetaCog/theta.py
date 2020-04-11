@@ -90,7 +90,7 @@ class Theta(commands.Cog):
         tokens = await self.db.tokens()
         theta = await self.bot.get_shared_api_tokens("theta")
         for token_type, token in tokens.items():
-            if token_type == "ThetaStream" and "api_key" and "client_id" not in theta:
+            if token_type == "ThetaStream" and "api_key" and "client_id" and "access_token" not in theta:
                 # Don't need to check Community since they're set the same
                 await self.bot.set_shared_api_tokens("theta", client_id=token)
         await self.db.tokens.clear()
@@ -99,7 +99,9 @@ class Theta(commands.Cog):
         tokens = await self.bot.get_shared_api_tokens("theta")
         if tokens.get("client_id"):
             try:
-                tokens["client_secret"]
+                if tokens.get("client_secret"):
+                    try:
+                        tokens["access_token"]
             except KeyError:
                 message = _(
                     "You need a client secret key to use correctly Theta API on this cog.\n"
@@ -163,7 +165,7 @@ class Theta(commands.Cog):
     async def thetastream(self, ctx: commands.Context, channel_name: str):
         """Check if a Theta channel is live."""
         await self.maybe_renew_theta_bearer_token()
-        token = (await self.bot.get_shared_api_tokens("theta")).get("client_id")
+        token = (await self.bot.get_shared_api_tokens("theta")).get("client_id").get("access_token"),
         theta = ThetaStream(
             name=channel_name, token=token, bearer=self.ttv_bearer_cache.get("access_token", None),
         )
