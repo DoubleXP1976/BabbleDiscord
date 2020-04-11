@@ -232,12 +232,12 @@ class Theta(commands.Cog):
         """Toggle alerts in this channel for a Theta stream."""
         await self.theta_alert(ctx, ThetaStream, channel_name_or_id)
 
-    @thetaalert.command(name="stop", usage="[disable_all=No]")
-    async def thetaalert_stop(self, ctx: commands.Context, _all: bool = False):
+    @thetaalert.command(name="quit", usage="[disable_all=No]")
+    async def thetaalert_quit(self, ctx: commands.Context, _all: bool = False):
         """Disable all Theta stream alerts in this channel or server.
-        `[p]thetaalert stop` will disable this channel's stream
+        `[p]thetaalert quit` will disable this channel's stream
         alerts.
-        Do `[p]thetaalert stop yes` to disable all stream alerts in
+        Do `[p]thetaalert quit yes` to disable all stream alerts in
         this server.
         """
         streams = self.theta.copy()
