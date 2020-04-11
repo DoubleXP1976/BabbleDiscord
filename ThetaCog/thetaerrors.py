@@ -10,6 +10,10 @@ class APIError(ThetaError):
     pass
 
 
+class StreamsError(ThetaError):
+    pass
+
+
 class InvalidThetaCredentials(ThetaError):
     pass
 
