@@ -671,8 +671,8 @@ class Theta(commands.Cog):
                                                                             # Might still be unable to edit role based on hierarchy
                                                                                 pass
                                                                         else:
-                                                                        edited_roles.append(role)
-                                                                        mentions.append(role.mention)
+                                                                            edited_roles.append(role)
+                                                                            mentions.append(role.mention)
                                                                         return " ".join(mentions), edited_roles
 
                                                             async def filter_theta(self, streams: list, channel: discord.TextChannel) -> list:
