@@ -646,7 +646,7 @@ class Theta(commands.Cog):
                                                                                                 m = await channel.send(content, embed=embed)
                                                                                                 theta._messages_cache.append(m)
                                                                                                 if edited_roles:
-                                                                                                for role in edited_roles:
+                                                                                                    for role in edited_roles:
                                                                                                 await role.edit(mentionable=False)
                                                                                                 await self.save_theta()
 
