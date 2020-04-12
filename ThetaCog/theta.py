@@ -367,363 +367,363 @@ class Theta(commands.Cog):
 
                                                                     await self.add_or_remove(ctx, stream)
 
-    @commands.group()
-    @checks.mod()
-    async def thetaset(self, ctx: commands.Context):
-        """Set tokens for accessing streams."""
-        pass
+                                                @commands.group()
+                                                @checks.mod()
+                                                async def thetaset(self, ctx: commands.Context):
+                                                    """Set tokens for accessing streams."""
+                                                    pass
 
-    @thetaset.command(name="timer")
-    @checks.is_owner()
-    async def _thetaset_refresh_timer(self, ctx: commands.Context, refresh_time: int):
-        """Set theta check refresh time."""
-        if refresh_time < 60:
-            return await ctx.send(_("You cannot set the refresh timer to less than 60 seconds"))
+                                                @thetaset.command(name="timer")
+                                                @checks.is_owner()
+                                                async def _thetaset_refresh_timer(self, ctx: commands.Context, refresh_time: int):
+                                                    """Set theta check refresh time."""
+                                                    if refresh_time < 60:
+                                                        return await ctx.send(_("You cannot set the refresh timer to less than 60 seconds"))
 
-        await self.db.refresh_timer.set(refresh_time)
-        await ctx.send(
-            _("Refresh timer set to {refresh_time} seconds".format(refresh_time=refresh_time))
-        )
+                                                        await self.db.refresh_timer.set(refresh_time)
+                                                        await ctx.send(
+                                                        _("Refresh timer set to {refresh_time} seconds".format(refresh_time=refresh_time))
+                                                        )
 
-    @thetaset.command()
-    @checks.is_owner()
-    async def thetatoken(self, ctx: commands.Context):
-        """Explain how to set the theta token."""
+                                                @thetaset.command()
+                                                @checks.is_owner()
+                                                async def thetatoken(self, ctx: commands.Context):
+                                                    """Explain how to set the theta token."""
 
-        message = _(
-            "You need a client secret key to use correctly Theta API on this cog.\n"
-            "Follow these steps:\n"
-            "1. Go to this page: https://discord.gg/as8hUeA.\n"
-            '2. Contact Ghostie in Theta Discord.\n'
-            "3. Copy your client ID and your client secret into:\n"
-            "`[p]set api theta client_id <your_client_id_here> "
-            "client_secret <your_client_secret_here>`\n\n"
-            "Note: These tokens are sensitive and should only be used in a private channel "
-            "or in DM with the bot."
-        ).format(prefix=ctx.clean_prefix)
+                                                    message = _(
+                                                    "You need a client secret key to use correctly Theta API on this cog.\n"
+                                                    "Follow these steps:\n"
+                                                    "1. Go to this page: https://discord.gg/as8hUeA.\n"
+                                                    '2. Contact Ghostie in Theta Discord.\n'
+                                                    "3. Copy your client ID and your client secret into:\n"
+                                                    "`[p]set api theta client_id <your_client_id_here> "
+                                                    "client_secret <your_client_secret_here>`\n\n"
+                                                    "Note: These tokens are sensitive and should only be used in a private channel "
+                                                    "or in DM with the bot."
+                                                    ).format(prefix=ctx.clean_prefix)
 
-        await ctx.maybe_send_embed(message)
+                                                    await ctx.maybe_send_embed(message)
 
-    @thetaset.group()
-    @commands.guild_only()
-    async def message(self, ctx: commands.Context):
-        """Manage custom message for theta alerts."""
-        pass
+                                                @thetaset.group()
+                                                @commands.guild_only()
+                                                async def message(self, ctx: commands.Context):
+                                                    """Manage custom message for theta alerts."""
+                                                    pass
 
-    @message.command(name="mention")
-    @commands.guild_only()
-    async def with_mention(self, ctx: commands.Context, message: str = None):
-        """Set Theta alert message when mentions are enabled.
-        Use `{mention}` in the message to insert the selected mentions.
-        Use `{theta.name}` in the message to insert the channel or user name.
-        For example: `[p]thetaset message mention "{mention}, {theta.name} is live!"`
-        """
-        if message is not None:
-            guild = ctx.guild
-            await self.db.guild(guild).live_message_mention.set(message)
-            await ctx.send(_("Theta alert message set!"))
-        else:
-            await ctx.send_help()
+                                                @message.command(name="mention")
+                                                @commands.guild_only()
+                                                async def with_mention(self, ctx: commands.Context, message: str = None):
+                                                    """Set Theta alert message when mentions are enabled.
+                                                    Use `{mention}` in the message to insert the selected mentions.
+                                                    Use `{theta.name}` in the message to insert the channel or user name.
+                                                    For example: `[p]thetaset message mention "{mention}, {theta.name} is live!"`
+                                                    """
+                                                    if message is not None:
+                                                        guild = ctx.guild
+                                                        await self.db.guild(guild).live_message_mention.set(message)
+                                                        await ctx.send(_("Theta alert message set!"))
+                                                    else:
+                                                        await ctx.send_help()
 
-    @message.command(name="nomention")
-    @commands.guild_only()
-    async def without_mention(self, ctx: commands.Context, message: str = None):
-        """Set Theta alert message when mentions are disabled.
-        Use `{theta.name}` in the message to insert the channel or user name.
-        For example: `[p]thetaset message nomention "{theta.name} is live!"`
-        """
-        if message is not None:
-            guild = ctx.guild
-            await self.db.guild(guild).live_message_nomention.set(message)
-            await ctx.send(_("Theta alert message set!"))
-        else:
-            await ctx.send_help()
+                                                @message.command(name="nomention")
+                                                @commands.guild_only()
+                                                async def without_mention(self, ctx: commands.Context, message: str = None):
+                                                    """Set Theta alert message when mentions are disabled.
+                                                    Use `{theta.name}` in the message to insert the channel or user name.
+                                                    For example: `[p]thetaset message nomention "{theta.name} is live!"`
+                                                    """
+                                                    if message is not None:
+                                                        guild = ctx.guild
+                                                        await self.db.guild(guild).live_message_nomention.set(message)
+                                                        await ctx.send(_("Theta alert message set!"))
+                                                    else:
+                                                        await ctx.send_help()
 
-    @message.command(name="clear")
-    @commands.guild_only()
-    async def clear_message(self, ctx: commands.Context):
-        """Reset the theta alert messages in this server."""
-        guild = ctx.guild
-        await self.db.guild(guild).live_message_mention.set(False)
-        await self.db.guild(guild).live_message_nomention.set(False)
-        await ctx.send(_("Theta alerts in this server will now use the default alert message."))
+                                                @message.command(name="clear")
+                                                @commands.guild_only()
+                                                async def clear_message(self, ctx: commands.Context):
+                                                    """Reset the theta alert messages in this server."""
+                                                    guild = ctx.guild
+                                                    await self.db.guild(guild).live_message_mention.set(False)
+                                                    await self.db.guild(guild).live_message_nomention.set(False)
+                                                    await ctx.send(_("Theta alerts in this server will now use the default alert message."))
 
-    @thetaset.group()
-    @commands.guild_only()
-    async def mention(self, ctx: commands.Context):
-        """Manage mention settings for Theta alerts."""
-        pass
+                                                @thetaset.group()
+                                                @commands.guild_only()
+                                                async def mention(self, ctx: commands.Context):
+                                                    """Manage mention settings for Theta alerts."""
+                                                    pass
 
-    @mention.command(aliases=["everyone"])
-    @commands.guild_only()
-    async def all(self, ctx: commands.Context):
-        """Toggle the `@\u200beveryone` mention."""
-        guild = ctx.guild
-        current_setting = await self.db.guild(guild).mention_everyone()
-        if current_setting:
-            await self.db.guild(guild).mention_everyone.set(False)
-            await ctx.send(_("`@\u200beveryone` will no longer be mentioned for stream alerts."))
-        else:
-            await self.db.guild(guild).mention_everyone.set(True)
-            await ctx.send(_("When a stream is live, `@\u200beveryone` will be mentioned."))
+                                                @mention.command(aliases=["everyone"])
+                                                @commands.guild_only()
+                                                async def all(self, ctx: commands.Context):
+                                                    """Toggle the `@\u200beveryone` mention."""
+                                                    guild = ctx.guild
+                                                    current_setting = await self.db.guild(guild).mention_everyone()
+                                                    if current_setting:
+                                                        await self.db.guild(guild).mention_everyone.set(False)
+                                                        await ctx.send(_("`@\u200beveryone` will no longer be mentioned for stream alerts."))
+                                                    else:
+                                                        await self.db.guild(guild).mention_everyone.set(True)
+                                                        await ctx.send(_("When a stream is live, `@\u200beveryone` will be mentioned."))
 
-    @mention.command(aliases=["here"])
-    @commands.guild_only()
-    async def online(self, ctx: commands.Context):
-        """Toggle the `@\u200bhere` mention."""
-        guild = ctx.guild
-        current_setting = await self.db.guild(guild).mention_here()
-        if current_setting:
-            await self.db.guild(guild).mention_here.set(False)
-            await ctx.send(_("`@\u200bhere` will no longer be mentioned for stream alerts."))
-        else:
-            await self.db.guild(guild).mention_here.set(True)
-            await ctx.send(_("When a stream is live, `@\u200bhere` will be mentioned."))
+                                                @mention.command(aliases=["here"])
+                                                @commands.guild_only()
+                                                async def online(self, ctx: commands.Context):
+                                                    """Toggle the `@\u200bhere` mention."""
+                                                    guild = ctx.guild
+                                                    current_setting = await self.db.guild(guild).mention_here()
+                                                    if current_setting:
+                                                        await self.db.guild(guild).mention_here.set(False)
+                                                        await ctx.send(_("`@\u200bhere` will no longer be mentioned for stream alerts."))
+                                                        else:
+                                                        await self.db.guild(guild).mention_here.set(True)
+                                                        await ctx.send(_("When a stream is live, `@\u200bhere` will be mentioned."))
 
-    @mention.command()
-    @commands.guild_only()
-    async def role(self, ctx: commands.Context, *, role: discord.Role):
-        """Toggle a role mention."""
-        current_setting = await self.db.role(role).mention()
-        if current_setting:
-            await self.db.role(role).mention.set(False)
-            await ctx.send(
-                _("`@\u200b{role.name}` will no longer be mentioned for stream alerts.").format(
-                    role=role
-                )
-            )
-        else:
-            await self.db.role(role).mention.set(True)
-            msg = _(
-                "When a Theta stream is live, `@\u200b{role.name}` will be mentioned."
-            ).format(role=role)
-            if not role.mentionable:
-                msg += " " + _(
-                    "Since the role is not mentionable, it will be momentarily made mentionable "
-                    "when announcing a streamalert. Please make sure I have the correct "
-                    "permissions to manage this role, or else members of this role won't receive "
-                    "a notification."
-                )
-            await ctx.send(msg)
+                                                @mention.command()
+                                                @commands.guild_only()
+                                                async def role(self, ctx: commands.Context, *, role: discord.Role):
+                                                    """Toggle a role mention."""
+                                                    current_setting = await self.db.role(role).mention()
+                                                    if current_setting:
+                                                        await self.db.role(role).mention.set(False)
+                                                        await ctx.send(
+                                                        _("`@\u200b{role.name}` will no longer be mentioned for stream alerts.").format(
+                                                        role=role
+                                                        )
+                                                        )
+                                                    else:
+                                                        await self.db.role(role).mention.set(True)
+                                                        msg = _(
+                                                        "When a Theta stream is live, `@\u200b{role.name}` will be mentioned."
+                                                        ).format(role=role)
+                                                        if not role.mentionable:
+                                                            msg += " " + _(
+                                                            "Since the role is not mentionable, it will be momentarily made mentionable "
+                                                            "when announcing a streamalert. Please make sure I have the correct "
+                                                            "permissions to manage this role, or else members of this role won't receive "
+                                                            "a notification."
+                                                            )
+                                                            await ctx.send(msg)
 
-    @thetaset.command()
-    @commands.guild_only()
-    async def autodelete(self, ctx: commands.Context, on_off: bool):
-        """Toggle alert deletion for when streams go offline."""
-        await self.db.guild(ctx.guild).autodelete.set(on_off)
-        if on_off:
-            await ctx.send(_("The notifications will be deleted once Theta streams go offline."))
-        else:
-            await ctx.send(_("Notifications will no longer be deleted."))
+                                                @thetaset.command()
+                                                @commands.guild_only()
+                                                async def autodelete(self, ctx: commands.Context, on_off: bool):
+                                                    """Toggle alert deletion for when streams go offline."""
+                                                    await self.db.guild(ctx.guild).autodelete.set(on_off)
+                                                    if on_off:
+                                                        await ctx.send(_("The notifications will be deleted once Theta streams go offline."))
+                                                    else:
+                                                        await ctx.send(_("Notifications will no longer be deleted."))
 
-    @thetaset.command(name="ignorereruns")
-    @commands.guild_only()
-    async def ignore_reruns(self, ctx: commands.Context):
-        """Toggle excluding rerun Theta streams from alerts."""
-        guild = ctx.guild
-        current_setting = await self.db.guild(guild).ignore_reruns()
-        if current_setting:
-            await self.db.guild(guild).ignore_reruns.set(False)
-            await ctx.send(_("Theta Streams of type 'rerun' will be included in alerts."))
-        else:
-            await self.db.guild(guild).ignore_reruns.set(True)
-            await ctx.send(_("Theta Streams of type 'rerun' will no longer send an alert."))
+                                                @thetaset.command(name="ignorereruns")
+                                                @commands.guild_only()
+                                                async def ignore_reruns(self, ctx: commands.Context):
+                                                    """Toggle excluding rerun Theta streams from alerts."""
+                                                    guild = ctx.guild
+                                                    current_setting = await self.db.guild(guild).ignore_reruns()
+                                                    if current_setting:
+                                                        await self.db.guild(guild).ignore_reruns.set(False)
+                                                        await ctx.send(_("Theta Streams of type 'rerun' will be included in alerts."))
+                                                    else:
+                                                        await self.db.guild(guild).ignore_reruns.set(True)
+                                                        await ctx.send(_("Theta Streams of type 'rerun' will no longer send an alert."))
 
-    async def add_or_remove(self, ctx: commands.Context, stream):
-        if ctx.channel.id not in theta.channels:
-            theta.channels.append(ctx.channel.id)
-            if theta not in self.theta:
-                self.theta.append(stream)
-            await ctx.send(
-                _(
-                    "I'll now send a notification in this channel when {theta.name} is live."
-                ).format(theta=theta)
-            )
-        else:
-            theta.channels.remove(ctx.channel.id)
-            if not theta.channels:
-                self.theta.remove(stream)
-            await ctx.send(
-                _(
-                    "I won't send notifications about {theta.name} in this channel anymore."
-                ).format(theta=theta)
-            )
+                                                async def add_or_remove(self, ctx: commands.Context, stream):
+                                                    if ctx.channel.id not in theta.channels:
+                                                        theta.channels.append(ctx.channel.id)
+                                                        if theta not in self.theta:
+                                                            self.theta.append(stream)
+                                                            await ctx.send(
+                                                            _(
+                                                            "I'll now send a notification in this channel when {theta.name} is live."
+                                                            ).format(theta=theta)
+                                                            )
+                                                        else:
+                                                            theta.channels.remove(ctx.channel.id)
+                                                            if not theta.channels:
+                                                                self.theta.remove(stream)
+                                                                await ctx.send(
+                                                                _(
+                                                                "I won't send notifications about {theta.name} in this channel anymore."
+                                                                ).format(theta=theta)
+                                                                )
 
-        await self.save_theta()
+                                                                await self.save_theta()
 
-    def get_theta(self, _class, name):
-        for theta in self.theta:
-            # if isinstance(theta, _class) and theta.name == name:
-            #    return theta stream
-            # Reloading this cog causes an issue with this check ^
-            # isinstance will always return False
-            # As a workaround, we'll compare the class' name instead.
-            # Good enough.
-            if _class.__name__ == "ThetaStream" and theta.type == _class.__name__:
-                # Because name could be a username or a channel id
-                if self.check_name_or_id(name) and theta.name.lower() == name.lower():
-                    return theta
-                elif not self.check_name_or_id(name) and theta.id == name:
-                    return theta
-            elif theta.type == _class.__name__ and theta.name.lower() == name.lower():
-                return theta
+                                                                def get_theta(self, _class, name):
+                                                                    for theta in self.theta:
+                                                                        # if isinstance(theta, _class) and theta.name == name:
+                                                                        #    return theta stream
+                                                                        # Reloading this cog causes an issue with this check ^
+                                                                        # isinstance will always return False
+                                                                        # As a workaround, we'll compare the class' name instead.
+                                                                        # Good enough.
+                                                                        if _class.__name__ == "ThetaStream" and theta.type == _class.__name__:
+                                                                            # Because name could be a username or a channel id
+                                                                            if self.check_name_or_id(name) and theta.name.lower() == name.lower():
+                                                                                return theta
+                                                                            elif not self.check_name_or_id(name) and theta.id == name:
+                                                                                return theta
+                                                                            elif theta.type == _class.__name__ and theta.name.lower() == name.lower():
+                                                                                return theta
 
-    @staticmethod
-    async def check_exists(theta):
-        try:
-            await theta.is_online()
-        except OfflineStream:
-            pass
-        except StreamNotFound:
-            return False
-        except StreamsError:
-            raise
-        return True
+                                                @staticmethod
+                                                async def check_exists(theta):
+                                                    try:
+                                                        await theta.is_online()
+                                                    except OfflineStream:
+                                                        pass
+                                                    except StreamNotFound:
+                                                        return False
+                                                    except StreamsError:
+                                                        raise
+                                                        return True
 
-    async def _theta_alerts(self):
-        await self.bot.wait_until_ready()
-        while True:
-            try:
-                await self.check_theta()
-            except asyncio.CancelledError:
-                pass
-            await asyncio.sleep(await self.db.refresh_timer())
+                                                async def _theta_alerts(self):
+                                                    await self.bot.wait_until_ready()
+                                                    while True:
+                                                        try:
+                                                            await self.check_theta()
+                                                        except asyncio.CancelledError:
+                                                            pass
+                                                            await asyncio.sleep(await self.db.refresh_timer())
 
-    async def check_theta(self):
-        for theta in self.theta:
-            with contextlib.suppress(Exception):
-                try:
-                    if theta.__class__.__name__ == "ThetaStream":
-                        await self.maybe_renew_theta_bearer_token()
-                        embed, is_rerun = await theta.is_online()
-                    else:
-                        embed = await theta.is_online()
-                        is_rerun = False
-                except OfflineStream:
-                    if not theta._messages_cache:
-                        continue
-                    for message in theta._messages_cache:
-                        with contextlib.suppress(Exception):
-                            autodelete = await self.db.guild(message.guild).autodelete()
-                            if autodelete:
-                                await message.delete()
-                    theta._messages_cache.clear()
-                    await self.save_theta()
-                else:
-                    if theta._messages_cache:
-                        continue
-                    for channel_id in theta.channels:
-                        channel = self.bot.get_channel(channel_id)
-                        if not channel:
-                            continue
-                        ignore_reruns = await self.db.guild(channel.guild).ignore_reruns()
-                        if ignore_reruns and is_rerun:
-                            continue
-                        mention_str, edited_roles = await self._get_mention_str(channel.guild)
+                                                async def check_theta(self):
+                                                    for theta in self.theta:
+                                                        with contextlib.suppress(Exception):
+                                                            try:
+                                                                if theta.__class__.__name__ == "ThetaStream":
+                                                                    await self.maybe_renew_theta_bearer_token()
+                                                                    embed, is_rerun = await theta.is_online()
+                                                                else:
+                                                                    embed = await theta.is_online()
+                                                                    is_rerun = False
+                                                                except OfflineStream:
+                                                                    if not theta._messages_cache:
+                                                                        continue
+                                                                        for message in theta._messages_cache:
+                                                                            with contextlib.suppress(Exception):
+                                                                                autodelete = await self.db.guild(message.guild).autodelete()
+                                                                                if autodelete:
+                                                                                    await message.delete()
+                                                                                    theta._messages_cache.clear()
+                                                                                    await self.save_theta()
+                                                                                else:
+                                                                                    if theta._messages_cache:
+                                                                                        continue
+                                                                                        for channel_id in theta.channels:
+                                                                                            channel = self.bot.get_channel(channel_id)
+                                                                                            if not channel:
+                                                                                                continue
+                                                                                                ignore_reruns = await self.db.guild(channel.guild).ignore_reruns()
+                                                                                                if ignore_reruns and is_rerun:
+                                                                                                    continue
+                                                                                                    mention_str, edited_roles = await self._get_mention_str(channel.guild)
 
-                        if mention_str:
-                            alert_msg = await self.db.guild(channel.guild).live_message_mention()
-                            if alert_msg:
-                                content = alert_msg.format(mention=mention_str, theta=theta)
-                            else:
-                                content = _("{mention}, {theta} is now live!").format(
-                                    mention=mention_str,
-                                    theta=escape(
-                                        str(theta.name), mass_mentions=True, formatting=True
-                                    ),
-                                )
-                        else:
-                            alert_msg = await self.db.guild(channel.guild).live_message_nomention()
-                            if alert_msg:
-                                content = alert_msg.format(theta=theta)
-                            else:
-                                content = _("{theta} is now live!").format(
-                                    theta=escape(
-                                        str(theta.name), mass_mentions=True, formatting=True
-                                    )
-                                )
+                                                                                                    if mention_str:
+                                                                                                        alert_msg = await self.db.guild(channel.guild).live_message_mention()
+                                                                                                        if alert_msg:
+                                                                                                            content = alert_msg.format(mention=mention_str, theta=theta)
+                                                                                                        else:
+                                                                                                            content = _("{mention}, {theta} is now live!").format(
+                                                                                                            mention=mention_str,
+                                                                                                            theta=escape(
+                                                                                                            str(theta.name), mass_mentions=True, formatting=True
+                                                                                                            ),
+                                                                                                            )
+                                                                                                        else:
+                                                                                                            alert_msg = await self.db.guild(channel.guild).live_message_nomention()
+                                                                                                            if alert_msg:
+                                                                                                                content = alert_msg.format(theta=theta)
+                                                                                                            else:
+                                                                                                                content = _("{theta} is now live!").format(
+                                                                                                                theta=escape(
+                                                                                                                str(theta.name), mass_mentions=True, formatting=True
+                                                                                                                )
+                                                                                                                )
 
-                        m = await channel.send(content, embed=embed)
-                        theta._messages_cache.append(m)
-                        if edited_roles:
-                            for role in edited_roles:
-                                await role.edit(mentionable=False)
-                        await self.save_theta()
+                                                                                                                m = await channel.send(content, embed=embed)
+                                                                                                                theta._messages_cache.append(m)
+                                                                                                                if edited_roles:
+                                                                                                                    for role in edited_roles:
+                                                                                                                        await role.edit(mentionable=False)
+                                                                                                                        await self.save_theta()
 
-    async def _get_mention_str(self, guild: discord.Guild) -> Tuple[str, List[discord.Role]]:
-        """Returns a 2-tuple with the string containing the mentions, and a list of
-        all roles which need to have their `mentionable` property set back to False.
-        """
-        settings = self.db.guild(guild)
-        mentions = []
-        edited_roles = []
-        if await settings.mention_everyone():
-            mentions.append("@everyone")
-        if await settings.mention_here():
-            mentions.append("@here")
-        can_manage_roles = guild.me.guild_permissions.manage_roles
-        for role in guild.roles:
-            if await self.db.role(role).mention():
-                if can_manage_roles and not role.mentionable:
-                    try:
-                        await role.edit(mentionable=True)
-                    except discord.Forbidden:
-                        # Might still be unable to edit role based on hierarchy
-                        pass
-                    else:
-                        edited_roles.append(role)
-                mentions.append(role.mention)
-        return " ".join(mentions), edited_roles
+                                                                                                                        async def _get_mention_str(self, guild: discord.Guild) -> Tuple[str, List[discord.Role]]:
+                                                                                                                            """Returns a 2-tuple with the string containing the mentions, and a list of
+                                                                                                                            all roles which need to have their `mentionable` property set back to False.
+                                                                                                                            """
+                                                                                                                            settings = self.db.guild(guild)
+                                                                                                                            mentions = []
+                                                                                                                            edited_roles = []
+                                                                                                                            if await settings.mention_everyone():
+                                                                                                                                mentions.append("@everyone")
+                                                                                                                                if await settings.mention_here():
+                                                                                                                                    mentions.append("@here")
+                                                                                                                                    can_manage_roles = guild.me.guild_permissions.manage_roles
+                                                                                                                                    for role in guild.roles:
+                                                                                                                                        if await self.db.role(role).mention():
+                                                                                                                                            if can_manage_roles and not role.mentionable:
+                                                                                                                                                try:
+                                                                                                                                                    await role.edit(mentionable=True)
+                                                                                                                                                except discord.Forbidden:
+                                                                                                                                                    # Might still be unable to edit role based on hierarchy
+                                                                                                                                                    pass
+                                                                                                                                                else:
+                                                                                                                                                    edited_roles.append(role)
+                                                                                                                                                    mentions.append(role.mention)
+                                                                                                                                                    return " ".join(mentions), edited_roles
 
-    async def filter_theta(self, streams: list, channel: discord.TextChannel) -> list:
-        filtered = []
-        for theta in theta:
-            th_id = str(theta["channel"]["_id"])
-            for alert in self.theta:
-                if isinstance(alert, ThetaStream) and alert.id == th_id:
-                    if channel.id in alert.channels:
-                        break
-            else:
-                filtered.append(theta)
-        return filtered
+                                                                                                                                                    async def filter_theta(self, streams: list, channel: discord.TextChannel) -> list:
+                                                                                                                                                        filtered = []
+                                                                                                                                                        for theta in theta:
+                                                                                                                                                            th_id = str(theta["channel"]["_id"])
+                                                                                                                                                            for alert in self.theta:
+                                                                                                                                                                if isinstance(alert, ThetaStream) and alert.id == th_id:
+                                                                                                                                                                    if channel.id in alert.channels:
+                                                                                                                                                                        break
+                                                                                                                    else:
+                                                                                                                        filtered.append(theta)
+                                                                                                                        return filtered
 
-    async def load_theta(self):
-        theta = []
-        for raw_theta in await self.db.theta():
-            _class = getattr(_thetatypes, raw_theta["type"], None)
-            if not _class:
-                continue
-            raw_msg_cache = raw_theta["messages"]
-            raw_theta["_messages_cache"] = []
-            for raw_msg in raw_msg_cache:
-                chn = self.bot.get_channel(raw_msg["channel"])
-                if chn is not None:
-                    try:
-                        msg = await chn.fetch_message(raw_msg["message"])
-                    except discord.HTTPException:
-                        pass
-                    else:
-                        raw_theta["_messages_cache"].append(msg)
-            token = await self.bot.get_shared_api_tokens(_class.token_name)
-            if token:
-                if _class.__name__ == "ThetaStream":
-                    raw_theta["token"] = token.get("client_id")
-                    raw_theta["bearer"] = self.ttv_bearer_cache.get("access_token", None)
-                else:
-                    raw_theta["token"] = token
-            theta.append(_class(**raw_theta))
+                                                                async def load_theta(self):
+                                                                    theta = []
+                                                                    for raw_theta in await self.db.theta():
+                                                                        _class = getattr(_thetatypes, raw_theta["type"], None)
+                                                                        if not _class:
+                                                                            continue
+                                                                            raw_msg_cache = raw_theta["messages"]
+                                                                            raw_theta["_messages_cache"] = []
+                                                                            for raw_msg in raw_msg_cache:
+                                                                                chn = self.bot.get_channel(raw_msg["channel"])
+                                                                                if chn is not None:
+                                                                                    try:
+                                                                                        msg = await chn.fetch_message(raw_msg["message"])
+                                                                                    except discord.HTTPException:
+                                                                                        pass
+                                                                                    else:
+                                                                                        raw_theta["_messages_cache"].append(msg)
+                                                                                        token = await self.bot.get_shared_api_tokens(_class.token_name)
+                                                                                        if token:
+                                                                                            if _class.__name__ == "ThetaStream":
+                                                                                                raw_theta["token"] = token.get("client_id")
+                                                                                                raw_theta["bearer"] = self.ttv_bearer_cache.get("access_token", None)
+                                                                                            else:
+                                                                                                raw_theta["token"] = token
+                                                                                                theta.append(_class(**raw_theta))
 
-        return theta
+                                                                                                return theta
 
-    async def save_theta(self):
-        raw_theta = []
-        for theta in self.theta:
-            raw_theta.append(theta.export())
+                                                                                                async def save_theta(self):
+                                                                                                    raw_theta = []
+                                                                                                    for theta in self.theta:
+                                                                                                        raw_theta.append(theta.export())
 
-        await self.db.theta.set(raw_theta)
+                                                                                                        await self.db.theta.set(raw_theta)
 
-    def cog_unload(self):
-        if self.task:
-            self.task.cancel()
+                                                                                                        def cog_unload(self):
+                                                                                                            if self.task:
+                                                                                                                self.task.cancel()
 
-    __del__ = cog_unload
+                                                                                                                __del__ = cog_unload
