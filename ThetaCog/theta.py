@@ -476,7 +476,7 @@ class Theta(commands.Cog):
                                                     if current_setting:
                                                         await self.db.guild(guild).mention_here.set(False)
                                                         await ctx.send(_("`@\u200bhere` will no longer be mentioned for stream alerts."))
-                                                        else:
+                                                    else:
                                                         await self.db.guild(guild).mention_here.set(True)
                                                         await ctx.send(_("When a stream is live, `@\u200bhere` will be mentioned."))
 
