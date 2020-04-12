@@ -177,7 +177,7 @@ class Theta(commands.Cog):
                                     stream: Union[ThetaStream],
                                     ):
                                     try:
-                                    info = await stream.is_online()
+                                        info = await stream.is_online()
                                     except OfflineStream:
                                         await ctx.send(_("That user is offline."))
                                     except StreamNotFound:
