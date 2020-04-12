@@ -678,7 +678,7 @@ class Theta(commands.Cog):
                                                             async def filter_theta(self, streams: list, channel: discord.TextChannel) -> list:
                                                                 filtered = []
                                                                 for theta in theta:
-                                                                th_id = str(theta["channel"]["_id"])
+                                                                    th_id = str(theta["channel"]["_id"])
                                                                 for alert in self.theta:
                                                                     if isinstance(alert, ThetaStream) and alert.id == th_id:
                                                                         if channel.id in alert.channels:
@@ -687,7 +687,7 @@ class Theta(commands.Cog):
                                                                         filtered.append(theta)
                                                                         return filtered
 
-                                                           async def load_theta(self):
+                                                            async def load_theta(self):
                                                                 theta = []
                                                                 for raw_theta in await self.db.theta():
                                                                     _class = getattr(_thetatypes, raw_theta["type"], None)
