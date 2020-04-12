@@ -164,39 +164,39 @@ class Theta(commands.Cog):
                              @commands.command()
                                     async def thetastream(self, ctx: commands.Context, channel_name: str):
                                         """Check if a Theta channel is live."""
-                                    await self.maybe_renew_theta_bearer_token()
-                                    token = (await self.bot.get_shared_api_tokens("theta")).get("client_id").get("access_token"),
-                                    theta = ThetaStream(
-                                    name=channel_name, token=token, bearer=self.ttv_bearer_cache.get("access_token", None),
-                                    )
-                                    await self.check_online(ctx, theta)
+                                        await self.maybe_renew_theta_bearer_token()
+                                            token = (await self.bot.get_shared_api_tokens("theta")).get("client_id").get("access_token"),
+                                            theta = ThetaStream(
+                                        name=channel_name, token=token, bearer=self.ttv_bearer_cache.get("access_token", None),
+                                        )
+                                        await self.check_online(ctx, theta)
 
-                                    async def check_online(
-                                    self,
-                                    ctx: commands.Context,
-                                        stream: Union[ThetaStream],
-                                        ):
-                                        try:
-                                            info = await stream.is_online()
-                                        except OfflineStream:
-                                            await ctx.send(_("That user is offline."))
-                                        except StreamNotFound:
-                                            await ctx.send(_("That channel doesn't seem to exist."))
-                                        except InvalidThetaCredentials:
-                                            await ctx.send(
-                                            _(
-                                            "The Theta token is either invalid or has not been set. See "
-                                            "`{prefix}streamset thetatoken`."
-                                            ).format(prefix=ctx.clean_prefix)
-                                            )
-                                        except APIError:
-                                            await ctx.send(
-                                            _("Something went wrong while trying to contact the stream service's API.")
-                                            )
-                                        else:
-                                            if isinstance(info, tuple):
-                                                embed, is_rerun = info
-                                                ignore_reruns = await self.db.guild(ctx.channel.guild).ignore_reruns()
+                                        async def check_online(
+                                        self,
+                                        ctx: commands.Context,
+                                            stream: Union[ThetaStream],
+                                            ):
+                                            try:
+                                                info = await stream.is_online()
+                                            except OfflineStream:
+                                                await ctx.send(_("That user is offline."))
+                                            except StreamNotFound:
+                                                await ctx.send(_("That channel doesn't seem to exist."))
+                                            except InvalidThetaCredentials:
+                                                await ctx.send(
+                                                _(
+                                                "The Theta token is either invalid or has not been set. See "
+                                                "`{prefix}streamset thetatoken`."
+                                                ).format(prefix=ctx.clean_prefix)
+                                                )
+                                            except APIError:
+                                                await ctx.send(
+                                                _("Something went wrong while trying to contact the stream service's API.")
+                                                )
+                                            else:
+                                                if isinstance(info, tuple):
+                                                    embed, is_rerun = info
+                                                    ignore_reruns = await self.db.guild(ctx.channel.guild).ignore_reruns()
                                                 if ignore_reruns and is_rerun:
                                                     await ctx.send(_("That user is offline."))
                                                     return
