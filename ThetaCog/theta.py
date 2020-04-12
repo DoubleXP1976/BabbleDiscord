@@ -204,20 +204,20 @@ class Theta(commands.Cog):
                                                 embed = info
                                                 await ctx.send(embed=embed)
 
- @commands.group()
- @commands.guild_only()
- @checks.mod()
- async def thetaalert(self, ctx: commands.Context):
-     """Manage automated theta alerts."""
-     pass
+    @commands.group()
+    @commands.guild_only()
+    @checks.mod()
+    async def thetaalert(self, ctx: commands.Context):
+        """Manage automated theta alerts."""
+        pass
 
- @thetaalert.group(name="theta", invoke_without_command=True)
- async def _theta(self, ctx: commands.Context, channel_name: str = None):
-     """Manage Theta stream notifications."""
-     if channel_name is not None:
-         await ctx.invoke(self.theta_alert_channel, channel_name)
-     else:
-         await ctx.send_help()
+    @thetaalert.group(name="theta", invoke_without_command=True)
+    async def _theta(self, ctx: commands.Context, channel_name: str = None):
+        """Manage Theta stream notifications."""
+        if channel_name is not None:
+            await ctx.invoke(self.theta_alert_channel, channel_name)
+        else:
+            await ctx.send_help()
 
  @_theta.command(name="channel")
  async def theta_alert_channel(self, ctx: commands.Context, channel_name: str):
