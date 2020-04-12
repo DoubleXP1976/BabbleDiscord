@@ -306,28 +306,28 @@ class Theta(commands.Cog):
 
                                                                             await ctx.send(msg)
 
-                                                 @thetaalert.command(name="list")
-                                                 async def thetaalert_list(self, ctx: commands.Context):
-                                                     """List all active stream alerts in this server."""
-                                                     theta_list = defaultdict(list)
-                                                     guild_channels_ids = [c.id for c in ctx.guild.channels]
-                                                     msg = _("Active alerts:\n\n")
+                                                @thetaalert.command(name="list")
+                                                async def thetaalert_list(self, ctx: commands.Context):
+                                                 """List all active stream alerts in this server."""
+                                                 theta_list = defaultdict(list)
+                                                 guild_channels_ids = [c.id for c in ctx.guild.channels]
+                                                 msg = _("Active alerts:\n\n")
 
-                                                     for theta in self.theta:
-                                                         for channel_id in theta.channels:
-                                                             if channel_id in guild_channels_ids:
-                                                                 theta_list[channel_id].append(theta.name.lower())
+                                                 for theta in self.theta:
+                                                     for channel_id in theta.channels:
+                                                         if channel_id in guild_channels_ids:
+                                                             theta_list[channel_id].append(theta.name.lower())
 
-                                                                 if not theta_list:
-                                                                     await ctx.send(_("There are no active alerts in this server."))
-                                                                     return
+                                                             if not theta_list:
+                                                                 await ctx.send(_("There are no active alerts in this server."))
+                                                                 return
 
-                                                                     for channel_id, theta in theta_list.items():
-                                                                         channel = ctx.guild.get_channel(channel_id)
-                                                                         msg += "** - #{}**\n{}\n".format(channel, ", ".join(theta))
+                                                                 for channel_id, theta in theta_list.items():
+                                                                     channel = ctx.guild.get_channel(channel_id)
+                                                                     msg += "** - #{}**\n{}\n".format(channel, ", ".join(theta))
 
-                                                                         for page in pagify(msg):
-                                                                             await ctx.send(page)
+                                                                     for page in pagify(msg):
+                                                                         await ctx.send(page)
 
                                                 async def theta_alert(self, ctx: commands.Context, _class, channel_name):
                                                     theta = self.get_theta(_class, channel_name)
