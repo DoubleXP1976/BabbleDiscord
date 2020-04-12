@@ -153,8 +153,8 @@ class Theta(commands.Cog):
                 if req.status != 200:
                     return
 
-        self.ttv_bearer_cache = data
-        self.ttv_bearer_cache["expires_at"] = datetime.now().timestamp() + data.get("expires_in")
+                    self.ttv_bearer_cache = data
+                    self.ttv_bearer_cache["expires_at"] = datetime.now().timestamp() + data.get("expires_in")
 
     async def maybe_renew_theta_bearer_token(self) -> None:
         if self.ttv_bearer_cache:
