@@ -195,8 +195,8 @@ class Theta(commands.Cog):
                                         )
                                     else:
                                             if isinstance(info, tuple):
-                                    embed, is_rerun = info
-                                    ignore_reruns = await self.db.guild(ctx.channel.guild).ignore_reruns()
+                                        embed, is_rerun = info
+                                        ignore_reruns = await self.db.guild(ctx.channel.guild).ignore_reruns()
                                             if ignore_reruns and is_rerun:
                                         await ctx.send(_("That user is offline."))
                                                 return
