@@ -666,17 +666,17 @@ class Theta(commands.Cog):
                                                                     if await self.db.role(role).mention():
                                                                         if can_manage_roles and not role.mentionable:
                                                                             try:
-                                                                await role.edit(mentionable=True)
-                                                                                                                                                except discord.Forbidden:
-                                                                                                                                                    # Might still be unable to edit role based on hierarchy
-                                                                                                                                                    pass
-                                                                                                                                                else:
-                                                                                                                                                    edited_roles.append(role)
-                                                                                                                                                    mentions.append(role.mention)
-                                                                                                                                                    return " ".join(mentions), edited_roles
+                                                                                await role.edit(mentionable=True)
+                                                                            except discord.Forbidden:
+                                                                            # Might still be unable to edit role based on hierarchy
+                                                                            pass
+                                                                        else:
+                                                                        edited_roles.append(role)
+                                                                        mentions.append(role.mention)
+                                                                        return " ".join(mentions), edited_roles
 
-                                                                                                                                                    async def filter_theta(self, streams: list, channel: discord.TextChannel) -> list:
-                                                                                                                                                        filtered = []
+                                                            async def filter_theta(self, streams: list, channel: discord.TextChannel) -> list:
+                                                                filtered = []
                                                                                                                                                         for theta in theta:
                                                                                                                                                             th_id = str(theta["channel"]["_id"])
                                                                                                                                                             for alert in self.theta:
