@@ -647,8 +647,8 @@ class Theta(commands.Cog):
                                                                                                 theta._messages_cache.append(m)
                                                                                                 if edited_roles:
                                                                                                     for role in edited_roles:
-                                                                                                await role.edit(mentionable=False)
-                                                                                                await self.save_theta()
+                                                                                                        await role.edit(mentionable=False)
+                                                                                                        await self.save_theta()
 
                                                             async def _get_mention_str(self, guild: discord.Guild) -> Tuple[str, List[discord.Role]]:
                                                                 """Returns a 2-tuple with the string containing the mentions, and a list of
