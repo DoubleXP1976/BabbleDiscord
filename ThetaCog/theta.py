@@ -280,31 +280,31 @@ class Theta(commands.Cog):
                                                     """
                                                     theta = self.theta.copy()
                                                     local_channel_ids = [c.id for c in ctx.guild.channels]
-                                                     to_remove = []
+                                                    to_remove = []
 
-                                                        for theta in theta:
-                                                            for channel_id in theta.channels:
-                                                                if channel_id == ctx.channel.id:
+                                                    for theta in theta:
+                                                        for channel_id in theta.channels:
+                                                            if channel_id == ctx.channel.id:
+                                                                theta.channels.remove(channel_id)
+                                                            elif _all and ctx.channel.id in local_channel_ids:
+                                                                if channel_id in theta.channels:
                                                                     theta.channels.remove(channel_id)
-                                                                elif _all and ctx.channel.id in local_channel_ids:
-                                                                    if channel_id in theta.channels:
-                                                                        theta.channels.remove(channel_id)
 
-                                                                        if not theta.channels:
-                                                                            to_remove.append(theta)
+                                                                    if not theta.channels:
+                                                                        to_remove.append(theta)
 
-                                                                            for theta in to_remove:
-                                                                                theta.remove(stream)
+                                                                        for theta in to_remove:
+                                                                            theta.remove(stream)
 
-                                                                                self.theta = theta
-                                                                                await self.save_theta()
+                                                                            self.theta = theta
+                                                                            await self.save_theta()
 
-                                                                                if _all:
-                                                                                    msg = _("All the stream alerts in this server have been disabled.")
-                                                                                else:
-                                                                                    msg = _("All the stream alerts in this channel have been disabled.")
+                                                                            if _all:
+                                                                                msg = _("All the stream alerts in this server have been disabled.")
+                                                                            else:
+                                                                                msg = _("All the stream alerts in this channel have been disabled.")
 
-                                                                                await ctx.send(msg)
+                                                                            await ctx.send(msg)
 
                                                  @thetaalert.command(name="list")
                                                  async def thetaalert_list(self, ctx: commands.Context):
