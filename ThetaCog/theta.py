@@ -242,130 +242,130 @@ class Theta(commands.Cog):
                                                     Do `[p]thetaalert quit yes` to disable all stream alerts in
                                                     this server.
                                                     """
- streams = self.theta.copy()
-     local_channel_ids = [c.id for c in ctx.guild.channels]
-     to_remove = []
+                                                        streams = self.theta.copy()
+                                                        local_channel_ids = [c.id for c in ctx.guild.channels]
+                                                         to_remove = []
 
-    for theta in theta:
-        for channel_id in theta.channels:
-            if channel_id == ctx.channel.id:
-                theta.channels.remove(channel_id)
-            elif _all and ctx.channel.id in local_channel_ids:
-                if channel_id in theta.channels:
-                    stream.channels.remove(channel_id)
+                                                            for theta in theta:
+                                                                for channel_id in theta.channels:
+                                                                    if channel_id == ctx.channel.id:
+                                                                        theta.channels.remove(channel_id)
+                                                                    elif _all and ctx.channel.id in local_channel_ids:
+                                                                        if channel_id in theta.channels:
+                                                                            stream.channels.remove(channel_id)
 
-            if not theta.channels:
-                to_remove.append(stream)
+                                                                            if not theta.channels:
+                                                                                to_remove.append(stream)
 
-        for theta in to_remove:
-            theta.remove(stream)
+                                                                                for theta in to_remove:
+                                                                                    theta.remove(stream)
 
-        self.theta = theta
-        await self.save_theta()
+                                                                                    self.theta = theta
+                                                                                    await self.save_theta()
 
-        if _all:
-            msg = _("All the stream alerts in this server have been disabled.")
-        else:
-            msg = _("All the stream alerts in this channel have been disabled.")
+                                                                                    if _all:
+                                                                                        msg = _("All the stream alerts in this server have been disabled.")
+                                                                                    else:
+                                                                                        msg = _("All the stream alerts in this channel have been disabled.")
 
-        await ctx.send(msg)
+                                                                                        await ctx.send(msg)
 
-    @thetaalert.command(name="stop", usage="[disable_all=No]")
-    async def thetaalert_stop(self, ctx: commands.Context, _all: bool = False):
-        """Disable all stream alerts in this channel or server.
-        `[p]thetaalert stop` will disable this channel's stream
-        alerts.
-        Do `[p]thetaalert stop yes` to disable all stream alerts in
-        this server.
-        """
-        theta = self.theta.copy()
-        local_channel_ids = [c.id for c in ctx.guild.channels]
-        to_remove = []
+                                                @thetaalert.command(name="stop", usage="[disable_all=No]")
+                                                async def thetaalert_stop(self, ctx: commands.Context, _all: bool = False):
+                                                    """Disable all stream alerts in this channel or server.
+                                                    `[p]thetaalert stop` will disable this channel's stream
+                                                    alerts.
+                                                    Do `[p]thetaalert stop yes` to disable all stream alerts in
+                                                    this server.
+                                                    """
+                                                    theta = self.theta.copy()
+                                                    local_channel_ids = [c.id for c in ctx.guild.channels]
+                                                     to_remove = []
 
-        for theta in theta:
-            for channel_id in theta.channels:
-                if channel_id == ctx.channel.id:
-                    theta.channels.remove(channel_id)
-                elif _all and ctx.channel.id in local_channel_ids:
-                    if channel_id in theta.channels:
-                        theta.channels.remove(channel_id)
+                                                        for theta in theta:
+                                                            for channel_id in theta.channels:
+                                                                if channel_id == ctx.channel.id:
+                                                                    theta.channels.remove(channel_id)
+                                                                elif _all and ctx.channel.id in local_channel_ids:
+                                                                    if channel_id in theta.channels:
+                                                                        theta.channels.remove(channel_id)
 
-            if not theta.channels:
-                to_remove.append(theta)
+                                                                        if not theta.channels:
+                                                                            to_remove.append(theta)
 
-        for theta in to_remove:
-            theta.remove(stream)
+                                                                            for theta in to_remove:
+                                                                                theta.remove(stream)
 
-        self.theta = theta
-        await self.save_theta()
+                                                                                self.theta = theta
+                                                                                await self.save_theta()
 
-        if _all:
-            msg = _("All the stream alerts in this server have been disabled.")
-        else:
-            msg = _("All the stream alerts in this channel have been disabled.")
+                                                                                if _all:
+                                                                                    msg = _("All the stream alerts in this server have been disabled.")
+                                                                                else:
+                                                                                    msg = _("All the stream alerts in this channel have been disabled.")
 
-        await ctx.send(msg)
+                                                                                await ctx.send(msg)
 
-    @thetaalert.command(name="list")
-    async def thetaalert_list(self, ctx: commands.Context):
-        """List all active stream alerts in this server."""
-        theta_list = defaultdict(list)
-        guild_channels_ids = [c.id for c in ctx.guild.channels]
-        msg = _("Active alerts:\n\n")
+                                                 @thetaalert.command(name="list")
+                                                 async def thetaalert_list(self, ctx: commands.Context):
+                                                     """List all active stream alerts in this server."""
+                                                     theta_list = defaultdict(list)
+                                                     guild_channels_ids = [c.id for c in ctx.guild.channels]
+                                                     msg = _("Active alerts:\n\n")
 
-        for theta in self.theta:
-            for channel_id in theta.channels:
-                if channel_id in guild_channels_ids:
-                    theta_list[channel_id].append(theta.name.lower())
+                                                     for theta in self.theta:
+                                                         for channel_id in theta.channels:
+                                                             if channel_id in guild_channels_ids:
+                                                                 theta_list[channel_id].append(theta.name.lower())
 
-        if not theta_list:
-            await ctx.send(_("There are no active alerts in this server."))
-            return
+                                                                 if not theta_list:
+                                                                     await ctx.send(_("There are no active alerts in this server."))
+                                                                     return
 
-        for channel_id, theta in theta_list.items():
-            channel = ctx.guild.get_channel(channel_id)
-            msg += "** - #{}**\n{}\n".format(channel, ", ".join(theta))
+                                                                     for channel_id, theta in theta_list.items():
+                                                                         channel = ctx.guild.get_channel(channel_id)
+                                                                         msg += "** - #{}**\n{}\n".format(channel, ", ".join(theta))
 
-        for page in pagify(msg):
-            await ctx.send(page)
+                                                                         for page in pagify(msg):
+                                                                             await ctx.send(page)
 
-    async def theta_alert(self, ctx: commands.Context, _class, channel_name):
-        theta = self.get_theta(_class, channel_name)
-        if not theta:
-            token = await self.bot.get_shared_api_tokens(_class.token_name)
-            is_theta = _class.__name__ == "ThetaStream"
-            if is_theta and not self.check_name_or_id(channel_name):
-                theta = _class(id=channel_name, token=token)
-            elif is_theta:
-                await self.maybe_renew_theta_bearer_token()
-                theta = _class(
-                    name=channel_name,
-                    token=token.get("client_id"),
-                    bearer=self.ttv_bearer_cache.get("access_token", None),
-                )
-            else:
-                theta = _class(name=channel_name, token=token)
-            try:
-                exists = await self.check_exists(stream)
-            except InvalidThetaCredentials:
-                await ctx.send(
-                    _(
-                        "The Thetatoken is either invalid or has not been set. See "
-                        "`{prefix}thetaset thetatoken`."
-                    ).format(prefix=ctx.clean_prefix)
-                )
-                return
-            except APIError:
-                await ctx.send(
-                    _("Something went wrong while trying to contact the stream service's API.")
-                )
-                return
-            else:
-                if not exists:
-                    await ctx.send(_("That channel doesn't seem to exist."))
-                    return
+                                                async def theta_alert(self, ctx: commands.Context, _class, channel_name):
+                                                    theta = self.get_theta(_class, channel_name)
+                                                    if not theta:
+                                                        token = await self.bot.get_shared_api_tokens(_class.token_name)
+                                                        is_theta = _class.__name__ == "ThetaStream"
+                                                        if is_theta and not self.check_name_or_id(channel_name):
+                                                            theta = _class(id=channel_name, token=token)
+                                                        elif is_theta:
+                                                            await self.maybe_renew_theta_bearer_token()
+                                                            theta = _class(
+                                                            name=channel_name,
+                                                            token=token.get("client_id"),
+                                                            bearer=self.ttv_bearer_cache.get("access_token", None),
+                                                            )
+                                                        else:
+                                                            theta = _class(name=channel_name, token=token)
+                                                            try:
+                                                                exists = await self.check_exists(stream)
+                                                            except InvalidThetaCredentials:
+                                                                await ctx.send(
+                                                                _(
+                                                                "The Thetatoken is either invalid or has not been set. See "
+                                                                "`{prefix}thetaset thetatoken`."
+                                                                ).format(prefix=ctx.clean_prefix)
+                                                                )
+                                                                return
+                                                            except APIError:
+                                                                await ctx.send(
+                                                                _("Something went wrong while trying to contact the stream service's API.")
+                                                                )
+                                                                return
+                                                            else:
+                                                                if not exists:
+                                                                    await ctx.send(_("That channel doesn't seem to exist."))
+                                                                    return
 
-        await self.add_or_remove(ctx, stream)
+                                                                    await self.add_or_remove(ctx, stream)
 
     @commands.group()
     @checks.mod()
