@@ -669,7 +669,7 @@ class Theta(commands.Cog):
                                                                                 await role.edit(mentionable=True)
                                                                             except discord.Forbidden:
                                                                             # Might still be unable to edit role based on hierarchy
-                                                                            pass
+                                                                                pass
                                                                         else:
                                                                         edited_roles.append(role)
                                                                         mentions.append(role.mention)
@@ -677,53 +677,52 @@ class Theta(commands.Cog):
 
                                                             async def filter_theta(self, streams: list, channel: discord.TextChannel) -> list:
                                                                 filtered = []
-                                                                                                                                                        for theta in theta:
-                                                                                                                                                            th_id = str(theta["channel"]["_id"])
-                                                                                                                                                            for alert in self.theta:
-                                                                                                                                                                if isinstance(alert, ThetaStream) and alert.id == th_id:
-                                                                                                                                                                    if channel.id in alert.channels:
-                                                                                                                                                                        break
-                                                                                                                    else:
-                                                                                                                        filtered.append(theta)
-                                                                                                                        return filtered
+                                                                for theta in theta:
+                                                                th_id = str(theta["channel"]["_id"])
+                                                                for alert in self.theta:
+                                                                    if isinstance(alert, ThetaStream) and alert.id == th_id:
+                                                                        if channel.id in alert.channels:
+                                                                            break
+                                                                        else:
+                                                                        filtered.append(theta)
+                                                                        return filtered
 
-                                                                async def load_theta(self):
-                                                                    theta = []
-                                                                    for raw_theta in await self.db.theta():
-                                                                        _class = getattr(_thetatypes, raw_theta["type"], None)
-                                                                        if not _class:
-                                                                            continue
-                                                                            raw_msg_cache = raw_theta["messages"]
-                                                                            raw_theta["_messages_cache"] = []
-                                                                            for raw_msg in raw_msg_cache:
-                                                                                chn = self.bot.get_channel(raw_msg["channel"])
-                                                                                if chn is not None:
-                                                                                    try:
-                                                                                        msg = await chn.fetch_message(raw_msg["message"])
-                                                                                    except discord.HTTPException:
-                                                                                        pass
-                                                                                    else:
-                                                                                        raw_theta["_messages_cache"].append(msg)
-                                                                                        token = await self.bot.get_shared_api_tokens(_class.token_name)
-                                                                                        if token:
-                                                                                            if _class.__name__ == "ThetaStream":
-                                                                                                raw_theta["token"] = token.get("client_id")
-                                                                                                raw_theta["bearer"] = self.ttv_bearer_cache.get("access_token", None)
-                                                                                            else:
-                                                                                                raw_theta["token"] = token
-                                                                                                theta.append(_class(**raw_theta))
+                                                           async def load_theta(self):
+                                                                theta = []
+                                                                for raw_theta in await self.db.theta():
+                                                                    _class = getattr(_thetatypes, raw_theta["type"], None)
+                                                                    if not _class:
+                                                                        continue
+                                                                        raw_msg_cache = raw_theta["messages"]
+                                                                        raw_theta["_messages_cache"] = []
+                                                                        for raw_msg in raw_msg_cache:
+                                                                            chn = self.bot.get_channel(raw_msg["channel"])
+                                                                            if chn is not None:
+                                                                                try:
+                                                                                    msg = await chn.fetch_message(raw_msg["message"])
+                                                                                except discord.HTTPException:
+                                                                                    pass
+                                                                                else:
+                                                                                    raw_theta["_messages_cache"].append(msg)
+                                                                                    token = await self.bot.get_shared_api_tokens(_class.token_name)
+                                                                                    if token:
+                                                                                        if _class.__name__ == "ThetaStream":
+                                                                                            raw_theta["token"] = token.get("client_id")
+                                                                                            raw_theta["bearer"] = self.ttv_bearer_cache.get("access_token", None)
+                                                                                        else:
+                                                                                            raw_theta["token"] = token
+                                                                                            theta.append(_class(**raw_theta))
 
-                                                                                                return theta
+                                                                                            return theta
+                                                            async def save_theta(self):
+                                                                raw_theta = []
+                                                                for theta in self.theta:
+                                                                raw_theta.append(theta.export())
 
-                                                                                                async def save_theta(self):
-                                                                                                    raw_theta = []
-                                                                                                    for theta in self.theta:
-                                                                                                        raw_theta.append(theta.export())
+                                                                await self.db.theta.set(raw_theta)
 
-                                                                                                        await self.db.theta.set(raw_theta)
+                                                                def cog_unload(self):
+                                                                    if self.task:
+                                                                    self.task.cancel()
 
-                                                                                                        def cog_unload(self):
-                                                                                                            if self.task:
-                                                                                                                self.task.cancel()
-
-                                                                                                                __del__ = cog_unload
+                                                                    __del__ = cog_unload
