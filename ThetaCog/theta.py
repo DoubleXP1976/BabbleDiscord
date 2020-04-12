@@ -185,8 +185,8 @@ class Theta(commands.Cog):
                                     except InvalidThetaCredentials:
                                         await ctx.send(
                                     _(
-                                        "The Theta token is either invalid or has not been set. See "
-                                        "`{prefix}streamset thetatoken`."
+                                            "The Theta token is either invalid or has not been set. See "
+                                            "`{prefix}streamset thetatoken`."
                                         ).format(prefix=ctx.clean_prefix)
                                     )
                                     except APIError:
@@ -195,13 +195,13 @@ class Theta(commands.Cog):
                                         )
                                     else:
                                             if isinstance(info, tuple):
-                                        embed, is_rerun = info
-                                        ignore_reruns = await self.db.guild(ctx.channel.guild).ignore_reruns()
-                                            if ignore_reruns and is_rerun:
+                                                embed, is_rerun = info
+                                                ignore_reruns = await self.db.guild(ctx.channel.guild).ignore_reruns()
+                                        if ignore_reruns and is_rerun:
                                         await ctx.send(_("That user is offline."))
-                                                return
+                                            return
                                     else:
-                                        embed = info
+                                            embed = info
                                         await ctx.send(embed=embed)
 
     @commands.group()
