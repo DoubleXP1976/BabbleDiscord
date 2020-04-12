@@ -244,7 +244,7 @@ class Theta(commands.Cog):
                                                     """
                                                     streams = self.theta.copy()
                                                     local_channel_ids = [c.id for c in ctx.guild.channels]
-                                                     to_remove = []
+                                                    to_remove = []
 
                                                             for theta in theta:
                                                                 for channel_id in theta.channels:
