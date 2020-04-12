@@ -717,7 +717,7 @@ class Theta(commands.Cog):
                                                             async def save_theta(self):
                                                                 raw_theta = []
                                                                 for theta in self.theta:
-                                                                raw_theta.append(theta.export())
+                                                                    raw_theta.append(theta.export())
 
                                                                 await self.db.theta.set(raw_theta)
 
