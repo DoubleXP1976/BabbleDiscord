@@ -684,7 +684,7 @@ class Theta(commands.Cog):
                                                                         if channel.id in alert.channels:
                                                                             break
                                                                         else:
-                                                                        filtered.append(theta)
+                                                                            filtered.append(theta)
                                                                         return filtered
 
                                                             async def load_theta(self):
