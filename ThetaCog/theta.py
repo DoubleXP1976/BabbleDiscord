@@ -643,20 +643,20 @@ class Theta(commands.Cog):
                                                                                                         ),
                                                                                                         )
 
-                                                                                                                m = await channel.send(content, embed=embed)
-                                                                                                                theta._messages_cache.append(m)
-                                                                                                                if edited_roles:
-                                                                                                                    for role in edited_roles:
-                                                                                                                        await role.edit(mentionable=False)
-                                                                                                                        await self.save_theta()
+                                                                                                m = await channel.send(content, embed=embed)
+                                                                                                    theta._messages_cache.append(m)
+                                                                                                    if edited_roles:
+                                                                                                    for role in edited_roles:
+                                                                                                    await role.edit(mentionable=False)
+                                                                                                    await self.save_theta()
 
-                                                                                                                        async def _get_mention_str(self, guild: discord.Guild) -> Tuple[str, List[discord.Role]]:
-                                                                                                                            """Returns a 2-tuple with the string containing the mentions, and a list of
-                                                                                                                            all roles which need to have their `mentionable` property set back to False.
-                                                                                                                            """
-                                                                                                                            settings = self.db.guild(guild)
-                                                                                                                            mentions = []
-                                                                                                                            edited_roles = []
+                                                            async def _get_mention_str(self, guild: discord.Guild) -> Tuple[str, List[discord.Role]]:
+                                                                """Returns a 2-tuple with the string containing the mentions, and a list of
+                                                                all roles which need to have their `mentionable` property set back to False.
+                                                                """
+                                                                settings = self.db.guild(guild)
+                                                                mentions = []
+                                                                edited_roles = []
                                                                                                                             if await settings.mention_everyone():
                                                                                                                                 mentions.append("@everyone")
                                                                                                                                 if await settings.mention_here():
