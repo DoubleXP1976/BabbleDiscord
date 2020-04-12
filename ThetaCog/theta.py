@@ -104,16 +104,16 @@ class Theta(commands.Cog):
                         tokens["access_token"]
                     except KeyError:
                         message = _(
-                    "You need a client secret key to use correctly Theta API on this cog.\n"
-                    "Follow these steps:\n"
-                    "1. Go to this page: https://discord.gg/as8hUeA.\n"
-                    '2. Contact Ghostie in Theta Discord.\n'
-                    "3. Copy your client ID and your client secret into:\n"
-                    "`[p]set api theta client_id <your_client_id_here> "
-                    "client_secret <your_client_secret_here>`\n\n"
-                    "Note: These tokens are sensitive and should only be used in a private channel "
-                    "or in DM with the bot."
-                )
+                            "You need a client secret key to use correctly Theta API on this cog.\n"
+                            "Follow these steps:\n"
+                            "1. Go to this page: https://discord.gg/as8hUeA.\n"
+                            '2. Contact Ghostie in Theta Discord.\n'
+                            "3. Copy your client ID and your client secret into:\n"
+                            "`[p]set api theta client_id <your_client_id_here> "
+                            "client_secret <your_client_secret_here>`\n\n"
+                            "Note: These tokens are sensitive and should only be used in a private channel "
+                            "or in DM with the bot."
+                            )
                 await send_to_owners_with_prefix_replaced(self.bot, message)
                 async with aiohttp.ClientSession() as session:
                     async with session.post(
