@@ -220,28 +220,28 @@ class Theta(commands.Cog):
                                                             await ctx.send_help()
 
                                                 @_theta.command(name="channel")
- async def theta_alert_channel(self, ctx: commands.Context, channel_name: str):
-     """Toggle alerts in this channel for a Theta stream."""
-     if re.fullmatch(r"<#\d+>", channel_name):
-         await ctx.send(
-         _("Please supply the name of a *Theta* channel, not a Discord channel.")
-         )
-         return
-         await self.theta_alert(ctx, ThetaStream, channel_name.lower())
+                                                async def theta_alert_channel(self, ctx: commands.Context, channel_name: str):
+                                                    """Toggle alerts in this channel for a Theta stream."""
+                                                    if re.fullmatch(r"<#\d+>", channel_name):
+                                                        await ctx.send(
+                                                        _("Please supply the name of a *Theta* channel, not a Discord channel.")
+                                                        )
+                                                        return
+                                                        await self.theta_alert(ctx, ThetaStream, channel_name.lower())
 
- @thetaalert.command(name="thetaalert")
- async def theta_alert(self, ctx: commands.Context, channel_name_or_id: str):
-     """Toggle alerts in this channel for a Theta stream."""
-        await self.theta_alert(ctx, ThetaStream, channel_name_or_id)
+                                                @thetaalert.command(name="thetaalert")
+                                                async def theta_alert(self, ctx: commands.Context, channel_name_or_id: str):
+                                                    """Toggle alerts in this channel for a Theta stream."""
+                                                        await self.theta_alert(ctx, ThetaStream, channel_name_or_id)
 
- @thetaalert.command(name="quit", usage="[disable_all=No]")
- async def thetaalert_quit(self, ctx: commands.Context, _all: bool = False):
-     """Disable all Theta stream alerts in this channel or server.
-     `[p]thetaalert quit` will disable this channel's stream
-     alerts.
-     Do `[p]thetaalert quit yes` to disable all stream alerts in
-     this server.
-     """
+                                                @thetaalert.command(name="quit", usage="[disable_all=No]")
+                                                async def thetaalert_quit(self, ctx: commands.Context, _all: bool = False):
+                                                    """Disable all Theta stream alerts in this channel or server.
+                                                    `[p]thetaalert quit` will disable this channel's stream
+                                                    alerts.
+                                                    Do `[p]thetaalert quit yes` to disable all stream alerts in
+                                                    this server.
+                                                    """
  streams = self.theta.copy()
      local_channel_ids = [c.id for c in ctx.guild.channels]
      to_remove = []
