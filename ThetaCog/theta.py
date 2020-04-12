@@ -723,6 +723,6 @@ class Theta(commands.Cog):
 
                                                                 def cog_unload(self):
                                                                     if self.task:
-                                                                    self.task.cancel()
+                                                                        self.task.cancel()
 
                                                                     __del__ = cog_unload
