@@ -599,49 +599,49 @@ class Theta(commands.Cog):
                                                                 else:
                                                                     embed = await theta.is_online()
                                                                     is_rerun = False
-                                                                except OfflineStream:
-                                                                    if not theta._messages_cache:
-                                                                        continue
-                                                                        for message in theta._messages_cache:
-                                                                            with contextlib.suppress(Exception):
-                                                                                autodelete = await self.db.guild(message.guild).autodelete()
-                                                                                if autodelete:
-                                                                                    await message.delete()
-                                                                                    theta._messages_cache.clear()
-                                                                                    await self.save_theta()
-                                                                                else:
-                                                                                    if theta._messages_cache:
-                                                                                        continue
-                                                                                        for channel_id in theta.channels:
-                                                                                            channel = self.bot.get_channel(channel_id)
-                                                                                            if not channel:
+                                                            except OfflineStream:
+                                                                if not theta._messages_cache:
+                                                                    continue
+                                                                    for message in theta._messages_cache:
+                                                                        with contextlib.suppress(Exception):
+                                                                            autodelete = await self.db.guild(message.guild).autodelete()
+                                                                            if autodelete:
+                                                                                await message.delete()
+                                                                                theta._messages_cache.clear()
+                                                                                await self.save_theta()
+                                                                            else:
+                                                                                if theta._messages_cache:
+                                                                                    continue
+                                                                                    for channel_id in theta.channels:
+                                                                                        channel = self.bot.get_channel(channel_id)
+                                                                                        if not channel:
+                                                                                            continue
+                                                                                            ignore_reruns = await self.db.guild(channel.guild).ignore_reruns()
+                                                                                            if ignore_reruns and is_rerun:
                                                                                                 continue
-                                                                                                ignore_reruns = await self.db.guild(channel.guild).ignore_reruns()
-                                                                                                if ignore_reruns and is_rerun:
-                                                                                                    continue
-                                                                                                    mention_str, edited_roles = await self._get_mention_str(channel.guild)
+                                                                                                mention_str, edited_roles = await self._get_mention_str(channel.guild)
 
-                                                                                                    if mention_str:
-                                                                                                        alert_msg = await self.db.guild(channel.guild).live_message_mention()
-                                                                                                        if alert_msg:
-                                                                                                            content = alert_msg.format(mention=mention_str, theta=theta)
-                                                                                                        else:
-                                                                                                            content = _("{mention}, {theta} is now live!").format(
-                                                                                                            mention=mention_str,
-                                                                                                            theta=escape(
-                                                                                                            str(theta.name), mass_mentions=True, formatting=True
-                                                                                                            ),
-                                                                                                            )
-                                                                                                        else:
-                                                                                                            alert_msg = await self.db.guild(channel.guild).live_message_nomention()
-                                                                                                            if alert_msg:
-                                                                                                                content = alert_msg.format(theta=theta)
-                                                                                                            else:
-                                                                                                                content = _("{theta} is now live!").format(
-                                                                                                                theta=escape(
-                                                                                                                str(theta.name), mass_mentions=True, formatting=True
-                                                                                                                )
-                                                                                                                )
+                                                                                                if mention_str:
+                                                                                                    alert_msg = await self.db.guild(channel.guild).live_message_mention()
+                                                                                                    if alert_msg:
+                                                                                                        content = alert_msg.format(mention=mention_str, theta=theta)
+                                                                                                    else:
+                                                                                                        content = _("{mention}, {theta} is now live!").format(
+                                                                                                        mention=mention_str,
+                                                                                                        theta=escape(
+                                                                                                        str(theta.name), mass_mentions=True, formatting=True
+                                                                                                        ),
+                                                                                                        )
+                                                                                                else:
+                                                                                                    alert_msg = await self.db.guild(channel.guild).live_message_nomention()
+                                                                                                    if alert_msg:
+                                                                                                        content = alert_msg.format(theta=theta)
+                                                                                                    else:
+                                                                                                        content = _("{theta} is now live!").format(
+                                                                                                        theta=escape(
+                                                                                                        str(theta.name), mass_mentions=True, formatting=True
+                                                                                                        ),
+                                                                                                        )
 
                                                                                                                 m = await channel.send(content, embed=embed)
                                                                                                                 theta._messages_cache.append(m)
