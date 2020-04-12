@@ -658,10 +658,10 @@ class Theta(commands.Cog):
                                                                 mentions = []
                                                                 edited_roles = []
                                                                 if await settings.mention_everyone():
-                                                                mentions.append("@everyone")
+                                                            mentions.append("@everyone")
                                                                 if await settings.mention_here():
-                                                                mentions.append("@here")
-                                                                can_manage_roles = guild.me.guild_permissions.manage_roles
+                                                            mentions.append("@here")
+                                                            can_manage_roles = guild.me.guild_permissions.manage_roles
                                                                 for role in guild.roles:
                                                                     if await self.db.role(role).mention():
                                                                         if can_manage_roles and not role.mentionable:
