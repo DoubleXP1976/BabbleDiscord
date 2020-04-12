@@ -721,8 +721,8 @@ class Theta(commands.Cog):
 
                                                                 await self.db.theta.set(raw_theta)
 
-                                                           def cog_unload(self):
+                                                            def cog_unload(self):
                                                                 if self.task:
                                                                     self.task.cancel()
 
-                                                          __del__ = cog_unload
+                                                            __del__ = cog_unload
