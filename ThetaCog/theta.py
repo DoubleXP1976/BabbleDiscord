@@ -90,7 +90,7 @@ class Theta(commands.Cog):
         tokens = await self.db.tokens()
         theta = await self.bot.get_shared_api_tokens("theta")
         for token_type, token in tokens.items():
-            if token_type == "ThetaStream" and "client_id" and "client_secret" not in theta:
+            if token_type == "ThetaStream" and "client_id" and "client_secret" and "code_given" not in theta:
                 # Don't need to check Community since they're set the same
                 await self.bot.set_shared_api_tokens("theta", client_id=token)
         await self.db.tokens.clear()
@@ -100,6 +100,8 @@ class Theta(commands.Cog):
         if tokens.get("client_id"):
             try:
                 tokens["client_secret"]
+                 try:
+                     tokens["code_given"]
             except KeyError:
                 message = _(
                     "You need a client secret key to use correctly Theta API on this cog.\n"
@@ -119,8 +121,8 @@ class Theta(commands.Cog):
                 params={
                     "client_id": tokens.get("client_id", ""),
                     "client_secret": tokens.get("client_secret", ""),
-                    "access_token": tokens.get("access_token", ""),
-                    "grant_type": "client_id",
+                    "code": tokens.get("code_given", ""),
+                    "grant_type": "authorization_code",
                 },
             ) as req:
                 try:
