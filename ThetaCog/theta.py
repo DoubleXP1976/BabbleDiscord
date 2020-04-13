@@ -99,7 +99,7 @@ class Theta(commands.Cog):
         tokens = await self.bot.get_shared_api_tokens("theta")
         if tokens.get("client_id"):
             try:
-                if tokens.get["access_token"]
+                tokens["access_token"]
             except KeyError:
                 message = _(
                     "You need a client secret key to use correctly Theta API on this cog.\n"
