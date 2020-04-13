@@ -7,7 +7,7 @@ from redbot.core.utils.chat_formatting import escape, pagify
 
 from .thetatypes import (
     ThetaStream
-    )
+)
 from .thetaerrors import (
     APIError,
     InvalidThetaCredentials,
@@ -113,96 +113,96 @@ class Theta(commands.Cog):
                             "client_secret <your_client_secret_here>`\n\n"
                             "Note: These tokens are sensitive and should only be used in a private channel "
                             "or in DM with the bot."
-                            )
-                await send_to_owners_with_prefix_replaced(self.bot, message)
-                async with aiohttp.ClientSession() as session:
-                    async with session.post(
-                "https://api.theta.tv/v1/oauth/token",
-                params={
-                    "client_id": tokens.get("client_id", ""),
-                    "client_secret": tokens.get("client_secret", ""),
-                    "access_token": tokens.get("access_token", ""),
-                    "grant_type": "access_token",
-                },
-            ) as req:
+                       )
+                       await send_to_owners_with_prefix_replaced(self.bot, message)
+            async with aiohttp.ClientSession() as session:
+                async with session.post(
+                    "https://api.theta.tv/v1/oauth/token",
+                    params={
+                        "client_id": tokens.get("client_id", ""),
+                        "client_secret": tokens.get("client_secret", ""),
+                        "access_token": tokens.get("access_token", ""),
+                        "grant_type": "access_token",
+                    },
+                ) as req:
                      try:
                          data = await req.json()
                      except aiohttp.ContentTypeError:
                          data = {}
 
-                if req.status == 200:
-                    pass
-                elif req.status == 400 and data.get("message") == "invalid client":
-                    log.error(
-                        "Theta API request failed authentication: set Client ID is invalid."
-                    )
-                elif req.status == 403 and data.get("message") == "invalid client secret":
-                    log.error(
-                        "Theta API request failed authentication: set Client Secret is invalid."
-                    )
-                elif "message" in data:
-                    log.error(
-                        "Theta OAuth2 API request failed with status code %s"
-                        " and error message: %s",
-                        req.status,
-                        data["message"],
-                    )
-                else:
-                    log.error("Theta OAuth2 API request failed with status code %s", req.status)
+                    if req.status == 200:
+                        pass
+                    elif req.status == 400 and data.get("message") == "invalid client":
+                        log.error(
+                            "Theta API request failed authentication: set Client ID is invalid."
+                        )
+                    elif req.status == 403 and data.get("message") == "invalid client secret":
+                        log.error(
+                            "Theta API request failed authentication: set Client Secret is invalid."
+                        )
+                    elif "message" in data:
+                        log.error(
+                            "Theta OAuth2 API request failed with status code %s"
+                            " and error message: %s",
+                            req.status,
+                            data["message"],
+                        )
+                    else:
+                        log.error("Theta OAuth2 API request failed with status code %s", req.status)
 
-                if req.status != 200:
-                    return
+                    if req.status != 200:
+                        return
 
-                self.ttv_bearer_cache = data
-                self.ttv_bearer_cache["expires_at"] = datetime.now().timestamp() + data.get("expires_in")
+            self.ttv_bearer_cache = data
+            self.ttv_bearer_cache["expires_at"] = datetime.now().timestamp() + data.get("expires_in")
 
-    async def maybe_renew_theta_bearer_token(self) -> None:
-        if self.ttv_bearer_cache:
-            if self.ttv_bearer_cache["expires_at"] - datetime.now().timestamp() <= 60:
-             await self.get_theta_bearer_token()
+        async def maybe_renew_theta_bearer_token(self) -> None:
+            if self.ttv_bearer_cache:
+                if self.ttv_bearer_cache["expires_at"] - datetime.now().timestamp() <= 60:
+                    await self.get_theta_bearer_token()
 
-@commands.command()
+     @commands.command()
      async def thetastream(self, ctx: commands.Context, channel_name: str):
-        """Check if a Theta channel is live."""
-             await self.maybe_renew_theta_bearer_token()
-             token = (await self.bot.get_shared_api_tokens("theta")).get("access_token")
-             theta = ThetaStream(
+         """Check if a Theta channel is live."""
+         await self.maybe_renew_theta_bearer_token()
+         token = (await self.bot.get_shared_api_tokens("theta")).get("access_token")
+         theta = ThetaStream(
             name=channel_name, token=token, bearer=self.ttv_bearer_cache.get("access_token", None),
-            )
-             await self.check_online(ctx, theta)
+        )
+        await self.check_online(ctx, theta)
 
      async def check_online(
         self,
         ctx: commands.Context,
-            stream: Union[ThetaStream],
-            ):
-            try:
-                info = await stream.is_online()
-            except OfflineStream:
+        stream: Union[ThetaStream],
+     ):
+        try:
+            info = await stream.is_online()
+        except OfflineStream:
                 await ctx.send(_("That user is offline."))
-            except StreamNotFound:
+        except StreamNotFound:
                 await ctx.send(_("That channel doesn't seem to exist."))
-            except InvalidThetaCredentials:
+        except InvalidThetaCredentials:
                 await ctx.send(
-            _(
-                    "The Theta token is either invalid or has not been set. See "
-                    "`{prefix}streamset thetatoken`."
-                ).format(prefix=ctx.clean_prefix)
+                    _(
+                        "The Theta token is either invalid or has not been set. See "
+                        "`{prefix}streamset thetatoken`."
+                    ).format(prefix=ctx.clean_prefix)
             )
-            except APIError:
-                await ctx.send(
-                    _("Something went wrong while trying to contact the stream service's API.")
-                )
+        except APIError:
+            await ctx.send(
+                _("Something went wrong while trying to contact the stream service's API.")
+            )
+        else:
+            if isinstance(info, tuple):
+                embed, is_rerun = info
+                ignore_reruns = await self.db.guild(ctx.channel.guild).ignore_reruns()
+                if ignore_reruns and is_rerun:
+                    await ctx.send(_("That user is offline."))
+                    return
             else:
-                            if isinstance(info, tuple):
-                                embed, is_rerun = info
-                                ignore_reruns = await self.db.guild(ctx.channel.guild).ignore_reruns()
-                            if ignore_reruns and is_rerun:
-                                await ctx.send(_("That user is offline."))
-                                return
-                            else:
-                                embed = info
-                                await ctx.send(embed=embed)
+                embed = info
+            await ctx.send(embed=embed)
 
     @commands.group()
     @commands.guild_only()
