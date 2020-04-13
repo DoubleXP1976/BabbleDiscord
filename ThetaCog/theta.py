@@ -165,9 +165,9 @@ class Theta(commands.Cog):
     async def thetastream(self, ctx: commands.Context, channel_name: str):
         """Check if a Theta channel is live."""
         await self.maybe_renew_theta_bearer_token()
-        token = (await self.bot.get_shared_api_tokens("theta")).get("access_token")
+        token = (await self.bot.get_shared_api_tokens("theta")).get("code_given")
         theta = ThetaStream(
-            name=channel_name, token=token, bearer=self.ttv_bearer_cache.get("access_token", None),
+            name=channel_name, token=token, bearer=self.ttv_bearer_cache.get("code_given", None),
         )
         await self.check_online(ctx, theta)
 
@@ -341,7 +341,7 @@ class Theta(commands.Cog):
                 theta = _class(
                 name=channel_name,
                 token=token.get("client_id"),
-                bearer=self.ttv_bearer_cache.get("access_token", None),
+                bearer=self.ttv_bearer_cache.get("code_given", None),
                 )
             else:
                 theta = _class(name=channel_name, token=token)

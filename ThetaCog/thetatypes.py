@@ -76,7 +76,7 @@ class ThetaStream(Theta):
             self.id = await self.fetch_id()
 
         url = THETA_STREAMS_ENDPOINT
-        header = {"Client-ID": str(self._client_id)}
+        header = {"client-_id": str(self._client_id)}
         if self._bearer is not None:
             header = {**header, "Authorization": f"Bearer {self._bearer}"}
         params = {"user_id": self.id}
@@ -136,7 +136,7 @@ class ThetaStream(Theta):
             raise APIError()
 
     async def fetch_id(self):
-        header = {"Client-ID": str(self._client_id)}
+        header = {"client-_id": str(self._client_id)}
         if self._bearer is not None:
             header = {**header, "Authorization": f"Bearer {self._bearer}"}
         url = THETA_ID_ENDPOINT
