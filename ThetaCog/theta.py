@@ -115,7 +115,7 @@ class Theta(commands.Cog):
                 await send_to_owners_with_prefix_replaced(self.bot, message)
         async with aiohttp.ClientSession() as session:
             async with session.post(
-                "https://api.theta.tv/v1/user",
+                "https://api.theta.tv/v1/",
                 params={
                     "client_id": tokens.get("client_id", ""),
                     "client_secret": tokens.get("client_secret", ""),
