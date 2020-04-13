@@ -156,10 +156,10 @@ class Theta(commands.Cog):
             self.ttv_bearer_cache = data
             self.ttv_bearer_cache["expires_at"] = datetime.now().timestamp() + data.get("expires_in")
 
-        async def maybe_renew_theta_bearer_token(self) -> None:
-            if self.ttv_bearer_cache:
-                if self.ttv_bearer_cache["expires_at"] - datetime.now().timestamp() <= 60:
-                    await self.get_theta_bearer_token()
+     async def maybe_renew_theta_bearer_token(self) -> None:
+         if self.ttv_bearer_cache:
+             if self.ttv_bearer_cache["expires_at"] - datetime.now().timestamp() <= 60:
+                 await self.get_theta_bearer_token()
 
      @commands.command()
      async def thetastream(self, ctx: commands.Context, channel_name: str):
