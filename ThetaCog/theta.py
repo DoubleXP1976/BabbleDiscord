@@ -102,80 +102,80 @@ class Theta(commands.Cog):
                 if tokens.get("client_secret"):
                     try:
                         tokens["access_token"]
-                    except KeyError:
-                        message = _(
-                            "You need a client secret key to use correctly Theta API on this cog.\n"
-                            "Follow these steps:\n"
-                            "1. Go to this page: https://discord.gg/as8hUeA.\n"
-                            '2. Contact Ghostie in Theta Discord.\n'
-                            "3. Copy your client ID and your client secret into:\n"
-                            "`[p]set api theta client_id <your_client_id_here> "
-                            "client_secret <your_client_secret_here>`\n\n"
-                            "Note: These tokens are sensitive and should only be used in a private channel "
-                            "or in DM with the bot."
-                       )
-                       await send_to_owners_with_prefix_replaced(self.bot, message)
-            async with aiohttp.ClientSession() as session:
-                async with session.post(
-                    "https://api.theta.tv/v1/oauth/token",
-                    params={
-                        "client_id": tokens.get("client_id", ""),
-                        "client_secret": tokens.get("client_secret", ""),
-                        "access_token": tokens.get("access_token", ""),
-                        "grant_type": "access_token",
-                    },
-                ) as req:
-                     try:
-                         data = await req.json()
-                     except aiohttp.ContentTypeError:
-                         data = {}
+            except KeyError:
+                message = _(
+                    "You need a client secret key to use correctly Theta API on this cog.\n"
+                    "Follow these steps:\n"
+                    "1. Go to this page: https://discord.gg/as8hUeA.\n"
+                    '2. Contact Ghostie in Theta Discord.\n'
+                    "3. Copy your client ID and your client secret into:\n"
+                    "`[p]set api theta client_id <your_client_id_here> "
+                    "client_secret <your_client_secret_here>`\n\n"
+                    "Note: These tokens are sensitive and should only be used in a private channel "
+                    "or in DM with the bot."
+                )
+                await send_to_owners_with_prefix_replaced(self.bot, message)
+        async with aiohttp.ClientSession() as session:
+            async with session.post(
+                "https://api.theta.tv/v1/oauth/token",
+                params={
+                    "client_id": tokens.get("client_id", ""),
+                    "client_secret": tokens.get("client_secret", ""),
+                    "access_token": tokens.get("access_token", ""),
+                    "grant_type": "access_token",
+                },
+            ) as req:
+                try:
+                    data = await req.json()
+                except aiohttp.ContentTypeError:
+                    data = {}
 
-                    if req.status == 200:
-                        pass
-                    elif req.status == 400 and data.get("message") == "invalid client":
-                        log.error(
-                            "Theta API request failed authentication: set Client ID is invalid."
-                        )
-                    elif req.status == 403 and data.get("message") == "invalid client secret":
-                        log.error(
-                            "Theta API request failed authentication: set Client Secret is invalid."
-                        )
-                    elif "message" in data:
-                        log.error(
-                            "Theta OAuth2 API request failed with status code %s"
-                            " and error message: %s",
-                            req.status,
-                            data["message"],
-                        )
-                    else:
-                        log.error("Theta OAuth2 API request failed with status code %s", req.status)
+                if req.status == 200:
+                    pass
+                elif req.status == 400 and data.get("message") == "invalid client":
+                    log.error(
+                        "Theta API request failed authentication: set Client ID is invalid."
+                    )
+                elif req.status == 403 and data.get("message") == "invalid client secret":
+                    log.error(
+                        "Theta API request failed authentication: set Client Secret is invalid."
+                    )
+                elif "message" in data:
+                    log.error(
+                        "Theta OAuth2 API request failed with status code %s"
+                        " and error message: %s",
+                        req.status,
+                        data["message"],
+                    )
+                else:
+                    log.error("Theta OAuth2 API request failed with status code %s", req.status)
 
-                    if req.status != 200:
-                        return
+                if req.status != 200:
+                    return
 
-            self.ttv_bearer_cache = data
-            self.ttv_bearer_cache["expires_at"] = datetime.now().timestamp() + data.get("expires_in")
+        self.ttv_bearer_cache = data
+        self.ttv_bearer_cache["expires_at"] = datetime.now().timestamp() + data.get("expires_in")
 
-     async def maybe_renew_theta_bearer_token(self) -> None:
-         if self.ttv_bearer_cache:
-             if self.ttv_bearer_cache["expires_at"] - datetime.now().timestamp() <= 60:
-                 await self.get_theta_bearer_token()
+    async def maybe_renew_theta_bearer_token(self) -> None:
+        if self.ttv_bearer_cache:
+            if self.ttv_bearer_cache["expires_at"] - datetime.now().timestamp() <= 60:
+                await self.get_theta_bearer_token()
 
-     @commands.command()
-     async def thetastream(self, ctx: commands.Context, channel_name: str):
-         """Check if a Theta channel is live."""
-         await self.maybe_renew_theta_bearer_token()
-         token = (await self.bot.get_shared_api_tokens("theta")).get("access_token")
-         theta = ThetaStream(
+    @commands.command()
+    async def thetastream(self, ctx: commands.Context, channel_name: str):
+        """Check if a Theta channel is live."""
+        await self.maybe_renew_theta_bearer_token()
+        token = (await self.bot.get_shared_api_tokens("theta")).get("access_token")
+        theta = ThetaStream(
             name=channel_name, token=token, bearer=self.ttv_bearer_cache.get("access_token", None),
         )
         await self.check_online(ctx, theta)
 
-     async def check_online(
+    async def check_online(
         self,
         ctx: commands.Context,
         stream: Union[ThetaStream],
-     ):
+    ):
         try:
             info = await stream.is_online()
         except OfflineStream:
