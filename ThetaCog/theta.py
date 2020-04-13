@@ -120,7 +120,7 @@ class Theta(commands.Cog):
                     "client_id": tokens.get("client_id", ""),
                     "client_secret": tokens.get("client_secret", ""),
                     "access_token": tokens.get("access_token", ""),
-                    "grant_type": "access_token",
+                    "grant_type": "client_secret",
                 },
             ) as req:
                 try:
