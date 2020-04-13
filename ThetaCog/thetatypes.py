@@ -18,8 +18,8 @@ from redbot.core.i18n import Translator
 from redbot.core.utils.chat_formatting import humanize_number
 
 THETA_BASE_URL = "https://api.theta.tv/v1"
-THETA_ID_ENDPOINT = THETA_BASE_URL + "/user/{{USER_ID}}"
-THETA_STREAMS_ENDPOINT = THETA_BASE_URL + "/theta/channel/list?number=1&="
+THETA_ID_ENDPOINT = THETA_BASE_URL + "/user/{{user_id}}"
+THETA_STREAMS_ENDPOINT = THETA_BASE_URL + "/theta/live/{{video_id}}"
 
 _ = Translator("Streams", __file__)
 
