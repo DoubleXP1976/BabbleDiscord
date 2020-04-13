@@ -100,8 +100,6 @@ class Theta(commands.Cog):
         if tokens.get("client_id"):
             try:
                 tokens["client_secret"]
-            try:
-                tokens["code_given"]
             except KeyError:
                 message = _(
                     "You need a client secret key to use correctly Theta API on this cog.\n"
